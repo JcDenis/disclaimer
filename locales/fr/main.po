@@ -1,0 +1,69 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Project-Id-Version: disclaimer 0.6.2\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2013-11-14T16:46:36+00:00\n"
+"Last-Translator: Jean-Christian Denis\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "disclaimer"
+msgstr "disclaimer"
+
+#: _admin.php:102
+#: _public.php:27
+#: disclaimer.html:9
+#: disclaimer.html:15
+msgid "Disclaimer"
+msgstr "Disclaimer"
+
+#: _admin.php:112
+msgid "Enable disclaimer"
+msgstr "Activer l'avertissement"
+
+#: _admin.php:133
+msgid "Remember the visitor"
+msgstr "Se souvenir du visiteur"
+
+#: _admin.php:136
+msgid "Link output:"
+msgstr "Lien de sortie :"
+
+msgid "Leave blank to redirect to the site Dotclear"
+msgstr "Laisser vide pour rediriger vers le site de Dotclear"
+
+#: _admin.php:148
+msgid "Disclaimer:"
+msgstr "Avertissement :"
+
+#: _admin.php:158
+msgid "List of robots allowed to index the site pages (separated by semicolons):"
+msgstr "Liste des robots autorisés à indexer les pages du site (séparés par un point virgule) :"
+
+#: _admin.php:173
+msgid "Disable the authorization of indexing by search engines"
+msgstr "Désactiver l'autorisation d'indexation par les moteurs de recherches"
+
+#: _public.php:28
+#: disclaimer.html:43
+msgid "Accept terms of uses"
+msgstr "Accepter les conditions d'utilisation"
+
+#: _public.php:29
+#: disclaimer.html:46
+msgid "I agree"
+msgstr "J'accepte"
+
+#: _public.php:30
+#: disclaimer.html:47
+msgid "I disagree"
+msgstr "Je refuse"
+
+msgid "Add a disclaimer to your blog entrance"
+msgstr "Ajoute un avertissement à l'entrée sur le blog"
+
+msgid "<p>You must accept this term before entering</p>"
+msgstr "<p>Vous devez accepter ces conditions avant d'entrer</p>"
+
