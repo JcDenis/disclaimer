@@ -1,42 +1,37 @@
-<!DOCTYPE html>
-<html lang="{{tpl:BlogLanguage}}">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="ROBOTS" content="{{tpl:BlogMetaRobots robots="NOINDEX"}}" />
+{{tpl:extends parent="__layout.html"}}
 
-  <title>{{tpl:lang Disclaimer}} - {{tpl:BlogName encode_html="1"}}</title>
-  <meta name="copyright" content="{{tpl:BlogCopyrightNotice encode_html="1"}}" />
-  <meta name="author" content="{{tpl:BlogEditor encode_html="1"}}" />
-  <meta name="date" content="{{tpl:BlogUpdateDate iso8601="1"}}" />
+<tpl:Block name="head-title">
+	<title>{{tpl:lang Disclaimer}} - {{tpl:BlogName encode_html="1"}}</title>
+</tpl:Block>
 
-  <meta property="dc.title" lang="{{tpl:BlogLanguage}}" content="{{tpl:lang Disclaimer}} - {{tpl:BlogName encode_html="1"}}" />
+<tpl:Block name="meta-robots">
+	<meta name="ROBOTS" content="{{tpl:BlogMetaRobots robots="NOINDEX"}}" />
+</tpl:Block>
+
+<tpl:Block name="meta-entry">
+	<meta name="description" lang="{{tpl:BlogLanguage}}" content="{{tpl:BlogDescription encode_html="1" cut_string="180" remove_html="1"}}" />
+	<meta name="author" content="{{tpl:BlogEditor encode_html="1"}}" />
+	<meta name="date" content="{{tpl:BlogUpdateDate iso8601="1"}}" />
+</tpl:Block>
+
+<tpl:Block name="dc-entry">
+	<meta property="dc.title" content="{{tpl:lang Disclaimer}} - {{tpl:BlogName encode_html="1"}}" />
+	<meta property="dc.description" lang="{{tpl:BlogLanguage}}" content="{{tpl:BlogDescription encode_html="1" cut_string="180" remove_html="1"}}" />
   <meta property="dc.language" content="{{tpl:BlogLanguage}}" />
-  <meta property="dc.publisher" content="{{tpl:BlogEditor encode_html="1"}}" />
-  <meta property="dc.rights" content="{{tpl:BlogCopyrightNotice encode_html="1"}}" />
-  <meta property="dc.date" content="{{tpl:BlogUpdateDate iso8601="1"}}" />
-  <meta property="dc.type" content="text" />
-  <meta property="dc.format" content="text/html" />
-  
-  <link rel="stylesheet" type="text/css" href="{{tpl:BlogThemeURL}}/style.css" media="screen" />
-  <link rel="stylesheet" type="text/css" href="{{tpl:BlogQmarkURL}}pf=print.css" media="print" />
+	<meta property="dc.date" content="{{tpl:BlogUpdateDate iso8601="1"}}" />
+</tpl:Block>
 
-  <link rel="stylesheet" type="text/css" href="{{tpl:BlogQmarkURL}}pf=disclaimer/css/disclaimer.css" media="screen" />
+<tpl:Block name="head-linkrel">
+	<link rel="contents" href="{{tpl:BlogArchiveURL}}" title="{{tpl:lang Archives}}" />
+</tpl:Block>
 
-  <script type="text/javascript" src="{{tpl:BlogQmarkURL}}pf={{tpl:BlogJsJQuery}}/jquery.js"></script>
-  <script type="text/javascript" src="{{tpl:BlogQmarkURL}}pf={{tpl:BlogJsJQuery}}/jquery.cookie.js"></script>
+<tpl:Block name="html-head">
+	{{tpl:parent}}
+</tpl:Block>
 
-{{tpl:include src="_head.html"}}
-</head>
+<tpl:Block name="body-tag"><body class="dc-disclaimer"></tpl:Block>
 
-<body class="dc-disclaimer">
-<div id="page">
-{{tpl:include src="_top.html"}}
-
-<div id="wrapper">
-
-<div id="main" role="main">
-  <div id="content">
-
+<tpl:Block name="main-content">
   <div id="content-info">
     <h2>{{tpl:DisclaimerTitle}}</h2>
   </div>
@@ -47,7 +42,7 @@
     </div>
     
     <div id="disclaimer-form">
-    <form action="{{tpl:DisclaimerFormURL}}" method="post" id="comment-form">
+    <form action="{{tpl:DisclaimerFormURL}}" method="post" id="comment-form" role="form">
 		  
       <p class="disclaimer-accept">{{tpl:lang Accept terms of uses}}</p>
         <p class="buttons">
@@ -58,11 +53,7 @@
     </div>
     
   </div>
-  </div>
-</div>
-</div> <!-- End #wrapper -->
+</tpl:Block>
 
-{{tpl:include src="_footer.html"}}
-</div> <!-- End #page -->
-</body>
-</html>
+<tpl:Block name="wrapper-sidebar">
+</tpl:Block>

@@ -91,9 +91,7 @@ class urlDisclaimer extends dcUrlHandlers
 	{
     $url = $core->blog->getQmarkURL().'pf='.basename(dirname(__FILE__));
 		echo
-		"<style type=\"text/css\">\n@import url(".
-			$url.
-		"/css/disclaimer.css);\n</style>\n";
+		'<link rel="stylesheet" type="text/css" media="screen" href="'.$url."/css/disclaimer.css\" />\n";
 	}
 
 	/**
