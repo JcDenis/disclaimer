@@ -60,7 +60,8 @@ dcCore::app()->addBehavior(
  */
 class urlDisclaimer extends dcUrlHandlers
 {
-	private const COOKIE_PREFIX = 'dc_disclaimer_cookie_';
+    private const COOKIE_PREFIX  = 'dc_disclaimer_cookie_';
+    private const SESSION_PREFIX = 'dc_disclaimer_sess_';
 
     public static $default_bots_agents = [
         'bot','Scooter','Slurp','Voila','WiseNut','Fast','Index','Teoma',
@@ -126,7 +127,7 @@ class urlDisclaimer extends dcUrlHandlers
         $session = new sessionDB(
             dcCore::app()->con,
             dcCore::app()->prefix . 'session',
-            'dc_disclaimer_sess_' . dcCore::app()->blog->id,
+            self::SESSION_PREFIX . dcCore::app()->blog->id,
             '/'
         );
         $session->start();

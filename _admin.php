@@ -36,7 +36,7 @@ dcCore::app()->addBehavior('adminBlogPreferencesHeaders', function () {
 
     return
         dcCore::app()->callBehavior('adminPostEditor', $editor['xhtml'], 'disclaimer', ['#disclaimer_text'], 'xhtml') .
-    	dcPage::jsModuleLoad(basename(__DIR__) . '/js/admin.js');
+        dcPage::jsModuleLoad(basename(__DIR__) . '/js/admin.js');
 });
 
 dcCore::app()->addBehavior('adminBlogPreferencesFormV2', function (dcSettings $blog_settings) {
@@ -50,7 +50,7 @@ dcCore::app()->addBehavior('adminBlogPreferencesFormV2', function (dcSettings $b
 
     echo
     '<div class="fieldset">' .
-    '<h4>' . __('Disclaimer') . '</h4>' .
+    '<h4 id="disclaimerParam">' . __('Disclaimer') . '</h4>' .
     '<div class="two-boxes">' .
 
     '<p><label class="classic" for="disclaimer_active">' .

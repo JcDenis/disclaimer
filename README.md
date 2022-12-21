@@ -7,40 +7,44 @@
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-green.svg)](https://plugins.dotaddict.org/dc2/details/disclaimer)
 [![License](https://img.shields.io/github/license/JcDenis/disclaimer)](https://github.com/JcDenis/disclaimer/blob/master/LICENSE)
 
-## QU'EST CE QUE DISCLAIMER ?
+## WHAT IS  DISCLAIMER ?
 
-"disclaimer" est un plugin pour l'outil open source de 
-publication web nommé Dotclear.
+_disclaimer_  is a plugin for the open-source 
+web publishing software called Dotclear.
 
-Ce plugin permet d'ajouter un texte d'avertissement 
-pour le visiteur avant son entrée sur le blog.
+It add a disclaimer to your blog entrance.
 
-Le code de ce plugin est largement inspiré du plugin
-"Private mode" d'Osku.
+This plugin is inspired from plugin "Private mode"  by Osku.
 
-## LICENCE
+## REQUIREMENTS
 
-This file is part of disclaimer, a plugin for Dotclear 2.
-Copyright (c) 2009 JC Denis and contributors
-jcdenis@gdwd.com
-Licensed under the GPL version 2.0 license.
-A copy of this license is available at
-http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ _disclaimer_ requires: 
 
-Some icons from Silk icon set 1.3 by Mark James at:
-http://www.famfamfam.com/lab/icons/silk/
-under a Creative Commons Attribution 2.5 License at
-http://creativecommons.org/licenses/by/2.5/
-
-## SUPPORT
-
-http://forum.dotclear.net
-
-### Note
-
-Certains thèmes ne sont pas compatibles avec ce plugin.
+  * admin permissions on blog
+  * Dotclear 2.24
 
 ## USAGE
+
+First install _disclaimer_, manualy from a zip package or from 
+Dotaddict repository. (See Dotclear's documentation to know how do this)
+
+You can activate and setup _disclaimer_ from blog preferences page.
+
+## LINKS
+
+ * License : [GNU GPL v2](https://www.gnu.org/licenses/old-licenses/lgpl-2.0.html)
+ * Source & contribution : [GitHub Page](https://github.com/JcDenis/disclaimer)
+ * Packages & details : [Dotaddict Page](https://plugins.dotaddict.org/dc2/details/disclaimer)
+ * Help & discuss : [Dotclear forum](http://forum.dotclear.org/viewtopic.php?id=40000)
+
+## CONTRIBUTORS
+
+ * Jean-Christian Denis (author)
+ * Pierre Van Glabeke
+
+ You are welcome to contribute to this code.
+
+## HELP (in french)
 
 ### Paramètres
 
@@ -84,10 +88,9 @@ tous les user-agent vers le disclaimer.
 
 Le fichier de template par default pour la page d'avertissement 
 se situe dans le repertoire "/default-template/mustek/disclaimer.html" ou
-"/default-template/currywurst/disclaimer.html" du plugin.
-
-Il faut le copier dans le repertoire /tpl du thème pour le modifier.
-
+"/default-template/dotty/disclaimer.html" du plugin.
+Il sera utilisé par défaut, sinon il faut le copier 
+dans le repertoire /tpl de votre thème pour le modifier.
 
 ### Balises
 
@@ -106,8 +109,3 @@ Texte de l'avertissement.
 A mettre dans l'attribut "action" de la balise "form".
 
 Ces balises supportent les attributs communs.
-
-
----
-Cordialement et en français dans le texte,
-Jean-Christian Denis

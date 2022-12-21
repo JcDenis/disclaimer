@@ -18,7 +18,7 @@ $this->registerModule(
     'disclaimer',
     'Add a disclaimer to your blog entrance',
     'Jean-Christian Denis, Pierre Van Glabeke',
-    '0.10',
+    '1.0',
     [
         'requires'    => [['core', '2.24']],
         'permissions' => dcCore::app()->auth->makePermissions([
@@ -28,5 +28,8 @@ $this->registerModule(
         'support'     => 'http://forum.dotclear.org/viewtopic.php?id=40000',
         'details'     => 'https://github.com/JcDenis/' . basename(__DIR__),
         'repository'  => 'https://raw.githubusercontent.com/JcDenis/' . basename(__DIR__) . '/master/dcstore.xml',
+        'settings'    => [
+            'blog' => '#params.disclaimerParam',
+        ],
     ]
 );
