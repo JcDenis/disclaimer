@@ -34,7 +34,7 @@ dcCore::app()->addBehavior('adminBeforeBlogSettingsUpdate', function (dcSettings
 dcCore::app()->addBehavior('adminBlogPreferencesHeaders', function () {
     $editor = dcCore::app()->auth->getOption('editor');
 
-    echo
+    return
         dcCore::app()->callBehavior('adminPostEditor', $editor['xhtml'], 'disclaimer', ['#disclaimer_text'], 'xhtml') .
     	dcPage::jsModuleLoad(basename(__DIR__) . '/js/admin.js');
 });
