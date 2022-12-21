@@ -1,0 +1,42 @@
+{{tpl:extends parent="__layout.html"}}
+
+<tpl:Block name="head-title">
+	  <title>{{tpl:lang Disclaimer}} - {{tpl:BlogName encode_html="1"}}</title>
+</tpl:Block>
+
+<tpl:Block name="meta-robots">
+	<meta name="ROBOTS" content="{{tpl:BlogMetaRobots robots="NOINDEX"}}" />
+</tpl:Block>
+
+<tpl:Block name="head-linkrel">
+	<link rel="contents" href="{{tpl:BlogArchiveURL}}" title="{{tpl:lang Archives}}" />
+</tpl:Block>
+
+<tpl:Block name="body-tag"><body class="dc-disclaimer"></tpl:Block>
+
+<tpl:Block name="main-content">
+  <div id="content-info">
+    <h2>{{tpl:DisclaimerTitle}}</h2>
+  </div>
+
+  <div class="content-inner">
+    <div class="disclaimer-text">
+    {{tpl:DisclaimerText}}
+    </div>
+    
+    <div id="disclaimer-form">
+    <form action="{{tpl:DisclaimerFormURL}}" method="post" id="comment-form" role="form">
+		  
+      <p class="disclaimer-accept">{{tpl:lang Accept terms of uses}}</p>
+        <p class="buttons">
+		      <input type="submit" class="submit" name="disclaimeragree" value="{{tpl:lang I agree}}" />
+          <input type="submit" class="submit" name="disclaimerdisagree" value="{{tpl:lang I disagree}}" />
+		    </p>
+    </form>
+    </div>
+
+  </div>
+</tpl:Block>
+
+<tpl:Block name="wrapper-sidebar">
+</tpl:Block> <!-- # wrapper-sidebar -->
