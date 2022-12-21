@@ -1,27 +1,24 @@
 <?php
-# -- BEGIN LICENSE BLOCK ----------------------------------
-#
-# This file is part of disclaimer, a plugin for Dotclear 2.
-# 
-# Copyright (c) 2009-2015 Jean-Christian Denis and contributors
-# 
-# Licensed under the GPL version 2.0 license.
-# A copy of this license is available in LICENSE file or at
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-#
-# -- END LICENSE BLOCK ------------------------------------
-
+/**
+ * @brief disclaimer, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugin
+ *
+ * @author Jean-Christian Denis, Pierre Van Glabeke
+ *
+ * @copyright Jean-Christian Denis
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 if (!defined('DC_RC_PATH')) {
-
-	return null;
+    return null;
 }
 
-$core->blog->settings->addNamespace('disclaimer');
+dcCore::app()->blog->settings->addNamespace(basename(__DIR__));
 
 # Is active
-if (!$core->blog->settings->disclaimer->disclaimer_active) {
-
-	return null;
+if (!dcCore::app()->blog->settings->get(basename(__DIR__))->get('disclaimer_active')) {
+    return null;
 }
 
 # Localized l10n
@@ -30,28 +27,30 @@ __('Accept terms of uses');
 __('I agree');
 __('I disagree');
 
-# Behaviors
-$core->addBehavior(
-	'publicBeforeDocument',
-	array('urlDisclaimer', 'publicBeforeDocument')
-);
-$core->addBehavior(
-	'publicHeadContent',
-	array('urlDisclaimer', 'publicHeadContent')
-);
-
 # Templates
-$core->tpl->addValue(
-	'DisclaimerTitle',
-	array('tplDisclaimer', 'DisclaimerTitle')
-);
-$core->tpl->addValue(
-	'DisclaimerText',
-	array('tplDisclaimer', 'DisclaimerText')
-);
-$core->tpl->addValue(
-	'DisclaimerFormURL',
-	array('tplDisclaimer', 'DisclaimerFormURL')
+dcCore::app()->tpl->addValue('DisclaimerTitle', function ($attr) {
+    return '<?php echo ' . sprintf(
+        dcCore::app()->tpl->getFilters($attr),
+        'dcCore::app()->blog->settings->get("disclaimer")->get("disclaimer_title")'
+    ) . '; ?>';
+});
+
+dcCore::app()->tpl->addValue('DisclaimerText', function ($attr) {
+    return '<?php echo dcCore::app()->blog->settings->get("disclaimer")->get("disclaimer_text"); ?>';
+});
+
+dcCore::app()->tpl->addValue('DisclaimerFormURL', function ($attr) {
+    return '<?php dcCore::app()->blog->url; ?>';
+});
+
+# Behaviors
+dcCore::app()->addBehavior('publicHeadContent', function () {
+    echo dcUtils::cssModuleLoad(basename(__DIR__) . '/css/disclaimer.css');
+});
+
+dcCore::app()->addBehavior(
+    'publicBeforeDocumentV2',
+    ['urlDisclaimer', 'publicBeforeDocumentV2']
 );
 
 /**
@@ -61,202 +60,137 @@ $core->tpl->addValue(
  */
 class urlDisclaimer extends dcUrlHandlers
 {
-	public static $default_bots_agents = array(
-		'bot','Scooter','Slurp','Voila','WiseNut','Fast','Index','Teoma',
-		'Mirago','search','find','loader','archive','Spider','Crawler'
-	);
+	private const COOKIE_PREFIX = 'dc_disclaimer_cookie_';
 
- /**
-	 * Remove public callbacks (and serve disclaimer css)
-	 *
-	 * @param  array $args Arguments
-	 */
-	public static function overwriteCallbacks($args)
-	{
-		if ($args == 'disclaimer.css') {
-			self::serveDocument('disclaimer.css', 'text/css', false);
-			exit;
-		}
+    public static $default_bots_agents = [
+        'bot','Scooter','Slurp','Voila','WiseNut','Fast','Index','Teoma',
+        'Mirago','search','find','loader','archive','Spider','Crawler',
+    ];
 
-		return null;
-	}
-
-	/**
-	 * Add CSS for disclaimer
-	 *
-	 * @param  dcCore $core dcCore instance
-	 * @return [type]       [description]
-	 */
-	public static function publicHeadContent(dcCore $core)
-	{
-    $url = $core->blog->getQmarkURL().'pf='.basename(dirname(__FILE__));
-		echo
-		'<link rel="stylesheet" type="text/css" media="screen" href="'.$url."/css/disclaimer.css\" />\n";
-	}
-
-	/**
-	 * Check disclaimer
-	 * 
-	 * @param  array $args Arguments
-	 */
-	public static function publicBeforeDocument($args)
-	{
-		global $core, $_ctx;
-
-		# Test user-agent to see if it is a bot
-		if (!$core->blog->settings->disclaimer->disclaimer_bots_unactive) {
-			$bots_agents = $core->blog->settings->disclaimer->diclaimer_bots_agents;
-			$bots_agents = !$bots_agents ? 
-				self::$default_bots_agents : explode(';', $bots_agents);
-
-			$is_bot = false;
-			foreach($bots_agents as $bot) {
-
-				if(stristr($_SERVER['HTTP_USER_AGENT'], $bot)) {
-					$is_bot = true;
-				}
-			}
-
-			if ($is_bot) {
-
-				return null;
-			}
-		}
-
-		# Set default-templates path for disclaimer files
-		$tplset = $core->themes->moduleInfo($core->blog->settings->system->theme,'tplset');
-        if (!empty($tplset) && is_dir(dirname(__FILE__).'/default-templates/'.$tplset)) {
-            $core->tpl->setPath($core->tpl->getPath(), dirname(__FILE__).'/default-templates/'.$tplset);
-        } else {
-            $core->tpl->setPath($core->tpl->getPath(), dirname(__FILE__).'/default-templates/'.DC_DEFAULT_TPLSET);
+    /**
+     * Remove public callbacks (and serve disclaimer css)
+     *
+     * @param  array $args Arguments
+     */
+    public static function overwriteCallbacks($args)
+    {
+        if ($args == 'disclaimer.css') {
+            self::serveDocument('disclaimer.css', 'text/css', false);
+            exit;
         }
 
-		# New URL handler
-		$urlHandler = new urlHandler();
-		$urlHandler->mode = $core->url->mode;
-		$urlHandler->registerDefault(array(
-			'urlDisclaimer',
-			'overwriteCallbacks'
-		));
+        return null;
+    }
 
-		# Create session if not exists
-		if (!isset($session)) {
-			$session = new sessionDB(
-				   $core->con,
-				   $core->prefix.'session',
-				   'dc_disclaimer_sess_'.$core->blog->id,
-				   '/'
-			);
-			$session->start();
-		}
+    /**
+     * Check disclaimer
+     */
+    public static function publicBeforeDocumentV2()
+    {
+        $s = dcCore::app()->blog->settings->addNamespace(basename(__DIR__));
 
-		# Remove all URLs representations
-		foreach ($core->url->getTypes() as $k => $v) {
-			$urlHandler->register(
-				$k,
-				$v['url'],
-				$v['representation'],
-				array('urlDisclaimer', 'overwriteCallbacks')
-			);
-		}
+        # Test user-agent to see if it is a bot
+        if (!$s->get('disclaimer_bots_unactive')) {
+            $bots_agents = $s->get('diclaimer_bots_agents');
+            $bots_agents = !$bots_agents ? self::$default_bots_agents : explode(';', $bots_agents);
 
-		# Get type
-		$urlHandler->getDocument();
-		$type = $urlHandler->type;
-		unset($urlHandler);
+            $is_bot = false;
+            foreach ($bots_agents as $bot) {
+                if (stristr($_SERVER['HTTP_USER_AGENT'], $bot)) {
+                    $is_bot = true;
+                }
+            }
 
-		# Test cookie
-		$cookie_name="dc_disclaimer_cookie_".$core->blog->id;
-		$cookie_value = 
-			empty($_COOKIE[$cookie_name]) 
-			|| !$core->blog->settings->disclaimer->disclaimer_remember ?
-				false : ($_COOKIE[$cookie_name]) == 1;
+            if ($is_bot) {
+                return null;
+            }
+        }
 
-		# User say "disagree" so go away
-		if (isset($_POST['disclaimerdisagree'])) {
-			$session->destroy();
-			if ($core->blog->settings->disclaimer->disclaimer_remember) {
-				setcookie($cookie_name, 0, time()-86400, '/');
-			}
-			$redir = $core->blog->settings->disclaimer->disclaimer_redir;
-			if (!$redir) {
-				$redir = 'http://www.dotclear.org';
-			}
-			http::redirect($redir);
-			exit;
-		}
+        # Set default-templates path for disclaimer files
+        $tplset = dcCore::app()->themes->moduleInfo(dcCore::app()->blog->settings->get('system')->get('theme'), 'tplset');
+        if (!empty($tplset) && is_dir(__DIR__ . '/default-templates/' . $tplset)) {
+            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/default-templates/' . $tplset);
+        } else {
+            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), __DIR__ . '/default-templates/' . DC_DEFAULT_TPLSET);
+        }
 
-		# Check if user say yes before
-		elseif (!isset($_SESSION['sess_blog_disclaimer']) 
-		 || $_SESSION['sess_blog_disclaimer'] != 1
-		) {
-			if ($core->blog->settings->disclaimer->disclaimer_remember 
-			 && $cookie_value != false
-			) {
-				$_SESSION['sess_blog_disclaimer'] = 1;
+        # New URL handler
+        $urlHandler       = new urlHandler();
+        $urlHandler->mode = dcCore::app()->url->mode;
+        $urlHandler->registerDefault([
+            'urlDisclaimer',
+            'overwriteCallbacks',
+        ]);
 
-				return null;
-			}
-			if (!empty($_POST['disclaimeragree'])) {
-				$_SESSION['sess_blog_disclaimer'] = 1;
+        # Create session
+        $session = new sessionDB(
+            dcCore::app()->con,
+            dcCore::app()->prefix . 'session',
+            'dc_disclaimer_sess_' . dcCore::app()->blog->id,
+            '/'
+        );
+        $session->start();
 
-				if ($core->blog->settings->disclaimer->disclaimer_remember) {
-					setcookie($cookie_name, 1, time() + 31536000, '/');
-				}
+        # Remove all URLs representations
+        foreach (dcCore::app()->url->getTypes() as $k => $v) {
+            $urlHandler->register(
+                $k,
+                $v['url'],
+                $v['representation'],
+                ['urlDisclaimer', 'overwriteCallbacks']
+            );
+        }
 
-				return null;
-			}
+        # Get type
+        $urlHandler->getDocument();
+        $type = $urlHandler->type;
+        unset($urlHandler);
 
-			$session->destroy();
-			self::serveDocument('disclaimer.html', 'text/html', false);
-			exit;
-		}
+        # Test cookie
+        $cookie_name  = self::COOKIE_PREFIX . dcCore::app()->blog->id;
+        $cookie_value = empty($_COOKIE[$cookie_name]) || !$s->get('disclaimer_remember') ?
+                false : ($_COOKIE[$cookie_name]) == 1;
 
-		return null;
-	}
-}
+        # User say "disagree" so go away
+        if (isset($_POST['disclaimerdisagree'])) {
+            $session->destroy();
+            if ($s->get('disclaimer_remember')) {
+                setcookie($cookie_name, '0', time() - 86400, '/');
+            }
+            $redir = $s->get('disclaimer_redir');
+            if (!$redir) {
+                $redir = 'http://www.dotclear.org';
+            }
+            http::redirect($redir);
+            exit;
+        }
 
-/**
- * @ingroup DC_PLUGIN_DISCLAIMER
- * @brief Public disclaimer - Template.
- * @since 2.6
- */
-class tplDisclaimer
-{
-	/**
-	 * Public title of disclaimer page and form
-	 * 
-	 * @param array $attr Template value attribute
-	 */
-	public static function DisclaimerTitle($attr)
-	{
-		$f = $GLOBALS['core']->tpl->getFilters($attr);
+        # Check if user say yes before
+        elseif (!isset($_SESSION['sess_blog_disclaimer'])
+         || $_SESSION['sess_blog_disclaimer'] != 1
+        ) {
+            if ($s->get('disclaimer_remember')
+             && $cookie_value != false
+            ) {
+                $_SESSION['sess_blog_disclaimer'] = 1;
 
-		return 
-		'<?php echo '.sprintf(
-			$f,
-			'$core->blog->settings->disclaimer->disclaimer_title'
-		).'; ?>';
-	}
+                return null;
+            }
+            if (!empty($_POST['disclaimeragree'])) {
+                $_SESSION['sess_blog_disclaimer'] = 1;
 
-	/**
-	 * Public disclaimer text
-	 * 
-	 * @param array $attr Template value attribute
-	 */
-	public static function DisclaimerText($attr)
-	{
-		return 
-		'<?php echo $core->blog->settings->disclaimer->disclaimer_text; ?>';
-	}
+                if ($s->get('disclaimer_remember')) {
+                    setcookie($cookie_name, '1', time() + 31536000, '/');
+                }
 
-	/**
-	 * Public URL of disclaimer form action
-	 * 
-	 * @param array $attr Template value attribute
-	 */
-	public static function DisclaimerFormURL($attr)
-	{
-		return '<?php $core->blog->url; ?>';
-	}
+                return null;
+            }
+
+            $session->destroy();
+            self::serveDocument('disclaimer.html', 'text/html', false);
+            exit;
+        }
+
+        return null;
+    }
 }

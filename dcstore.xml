@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<modules xmlns:da="http://dotaddict.org/da/">
+  <module id="disclaimer">
+    <name>disclaimer</name>
+    <version>0.10</version>
+    <author>Jean-Christian Denis, Pierre Van Glabeke</author>
+    <desc>Add a disclaimer to your blog entrance</desc>
+    <file>https://github.com/JcDenis/disclaimer/releases/download/v0.10/plugin-disclaimer.zip</file>
+    <da:dcmin>2.24</da:dcmin>
+    <da:details>https://github.com/JcDenis/disclaimer</da:details>
+    <da:support>http://forum.dotclear.org/viewtopic.php?id=40000</da:support>
+  </module>
+</modules>

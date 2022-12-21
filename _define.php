@@ -1,36 +1,32 @@
 <?php
-# -- BEGIN LICENSE BLOCK ----------------------------------
-#
-# This file is part of disclaimer, a plugin for Dotclear 2.
-# 
-# Copyright (c) 2009-2015 Jean-Christian Denis and contributors
-# 
-# Licensed under the GPL version 2.0 license.
-# A copy of this license is available in LICENSE file or at
-# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
-#
-# -- END LICENSE BLOCK ------------------------------------
-
+/**
+ * @brief disclaimer, a plugin for Dotclear 2
+ *
+ * @package Dotclear
+ * @subpackage Plugin
+ *
+ * @author Jean-Christian Denis, Pierre Van Glabeke
+ *
+ * @copyright Jean-Christian Denis
+ * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 if (!defined('DC_RC_PATH')) {
-
-	return null;
+    return null;
 }
- 
+
 $this->registerModule(
-	/* Name */
-	"disclaimer",
-	/* Description*/
-	"Add a disclaimer to your blog entrance",
-	/* Author */
-	"Jean-Christian Denis, Pierre Van Glabeke",
-	/* Version */
-	'0.9',
-	/* Properties */
-	array(
-		'permissions' => 'admin',
-		'type' => 'plugin',
-		'dc_min' => '2.8',
-		'support' => 'http://forum.dotclear.org/viewtopic.php?id=40000',
-		'details' => 'http://plugins.dotaddict.org/dc2/details/disclaimer'
-	)
+    'disclaimer',
+    'Add a disclaimer to your blog entrance',
+    'Jean-Christian Denis, Pierre Van Glabeke',
+    '0.10',
+    [
+        'requires'    => [['core', '2.24']],
+        'permissions' => dcCore::app()->auth->makePermissions([
+            dcAuth::PERMISSION_ADMIN,
+        ]),
+        'type'        => 'plugin',
+        'support'     => 'http://forum.dotclear.org/viewtopic.php?id=40000',
+        'details'     => 'https://github.com/JcDenis/' . basename(__DIR__),
+        'repository'  => 'https://raw.githubusercontent.com/JcDenis/' . basename(__DIR__) . '/master/dcstore.xml',
+    ]
 );

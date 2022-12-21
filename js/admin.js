@@ -1,6 +1,12 @@
-$(function() {
-	if ($.isFunction(jsToolBar)) {
-		var tbUser = new jsToolBar(document.getElementById('disclaimer_text'));
-		tbUser.draw('xhtml');
-	}
+/*global $, dotclear, jsToolBar */
+'use strict';
+
+$(() => {
+  if (typeof jsToolBar === 'function') {
+    $('#disclaimer_text').each(function () {
+      const tbWidgetTextDisclaimer = new jsToolBar(this);
+      tbWidgetTextDisclaimer.context = 'disclaimer_text';
+      tbWidgetTextDisclaimer.draw('xhtml');
+    });
+  }
 });

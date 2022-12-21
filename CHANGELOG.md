@@ -1,3 +1,9 @@
+todo
+bug jsToolBar !
+
+1.0 - 2022.12.xx
+* update to dotclear 2.24
+
 v0.9 - 19-07-2015 - Pierre Van Glabek
 * héritabe thème mustek
 * dc2.8 requis
