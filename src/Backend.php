@@ -10,115 +10,122 @@
  * @copyright Jean-Christian Denis
  * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-if (!defined('DC_CONTEXT_ADMIN')) {
-    return null;
+declare(strict_types=1);
+
+namespace Dotclear\Plugin\disclaimer;
+
+use dcCore;
+use dcPage;
+use dcNsProcess;
+use dcSettings;
+use Dotclear\Helper\Html\Form\{
+    Checkbox,
+    Div,
+    Label,
+    Input,
+    Note,
+    Para,
+    Text,
+    Textarea
+};
+use Dotclear\Helper\Html\Html;
+use Exception;
+
+class Backend extends dcNsProcess
+{
+    public static function init(): bool
+    {
+        static::$init = defined('DC_CONTEXT_ADMIN')
+            && My::phpCompliant()
+            && dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
+                dcCore::app()->auth::PERMISSION_CONTENT_ADMIN,
+            ]), dcCore::app()->blog->id);
+
+        return static::$init;
+    }
+
+    public static function process(): bool
+    {
+        if (!static::$init) {
+            return false;
+        }
+
+        dcCore::app()->addBehaviors([
+            'adminBeforeBlogSettingsUpdate' => function (dcSettings $blog_settings): void {
+                $s = $blog_settings->get(My::id());
+
+                try {
+                    $s->put('disclaimer_active', isset($_POST['disclaimer_active']));
+                    $s->put('disclaimer_remember', isset($_POST['disclaimer_remember']));
+                    $s->put('disclaimer_redir', $_POST['disclaimer_redir'] ?? '');
+                    $s->put('disclaimer_title', $_POST['disclaimer_title'] ?? '');
+                    $s->put('disclaimer_text', $_POST['disclaimer_text'] ?? '');
+                    $s->put('disclaimer_bots_unactive', isset($_POST['disclaimer_bots_unactive']));
+                    $s->put('disclaimer_bots_agents', $_POST['disclaimer_bots_agents'] ?? '');
+                } catch (Exception $e) {
+                    $s->drop('disclaimer_active');
+                    $s->put('disclaimer_active', 0);
+                }
+            },
+
+            'adminBlogPreferencesHeaders' => function (): string {
+                $editor = dcCore::app()->auth->getOption('editor');
+
+                return
+                    dcCore::app()->callBehavior('adminPostEditor', $editor['xhtml'], 'disclaimer', ['#disclaimer_text'], 'xhtml') .
+                    dcPage::jsModuleLoad(My::id() . '/js/backend.js');
+            },
+
+            'adminBlogPreferencesFormV2' => function (dcSettings $blog_settings): void {
+                $s = $blog_settings->get(My::id());
+
+                $disclaimer_bots_agents = $s->get('disclaimer_bots_agents');
+                if (empty($disclaimer_bots_agents)) {
+                    $disclaimer_bots_agents = implode(';', My::DEFAULT_BOTS_AGENTS);
+                }
+
+                echo
+                (new Div())->class('fieldset')->items([
+                    (new Text('h4', My::name()))->id('disclaimerParam'),
+                    (new Div())->class('two-boxes even')->items([
+                        (new Para())->items([
+                            (new Checkbox('disclaimer_active', (bool) $s->get('disclaimer_active')))->value(1),
+                            (new Label(__('Enable disclaimer'), Label::OUTSIDE_LABEL_AFTER))->for('disclaimer_active')->class('classic'),
+                        ]),
+                        (new Para())->items([
+                            (new Label(__('Title:')))->for('disclaimer_title'),
+                            (new Input('disclaimer_title'))->size(30)->maxlenght(255)->value(Html::escapeHTML((string) $s->get('disclaimer_title'))),
+                        ]),
+                    ]),
+                    (new Div())->class('two-boxes odd')->items([
+                        (new Para())->items([
+                            (new Checkbox('disclaimer_remember', (bool) $s->get('disclaimer_remember')))->value(1),
+                            (new Label(__('Remember the visitor'), Label::OUTSIDE_LABEL_AFTER))->for('disclaimer_remember')->class('classic'),
+                        ]),
+                        (new Para())->items([
+                            (new Label(__('Link output:')))->for('disclaimer_redir'),
+                            (new Input('disclaimer_redir'))->size(30)->maxlenght(255)->value(Html::escapeHTML((string) $s->get('disclaimer_redir'))),
+                        ]),
+                        (new Note())->class('form-note')->text(__('Leave blank to redirect to the site Dotclear')),
+                    ]),
+                    (new Div())->class('clear')->items([
+                        (new Para())->items([
+                            (new Label(__('Disclaimer:'), Label::OUTSIDE_LABEL_BEFORE))->for('disclaimer_text'),
+                            (new Textarea('disclaimer_text', Html::escapeHTML((string) $s->get('disclaimer_text'))))->cols(60)->rows(5)->lang(dcCore::app()->blog->settings->get('system')->get('lang'))->spellcheck(true),
+                        ]),
+                        (new Para())->items([
+                            (new Label(__('List of robots allowed to index the site pages (separated by semicolons):')))->for('disclaimer_bots_agents'),
+                            (new Input('disclaimer_bots_agents'))->size(120)->maxlenght(255)->value(Html::escapeHTML($disclaimer_bots_agents)),
+                        ]),
+                        (new Para())->items([
+                            (new Checkbox('disclaimer_bots_unactive', (bool) $s->get('disclaimer_bots_unactive')))->value(1),
+                            (new Label(__('Disable the authorization of indexing by search engines'), Label::OUTSIDE_LABEL_AFTER))->for('disclaimer_bots_unactive')->class('classic'),
+                        ]),
+                    ]),
+                ])->render();
+            },
+        ]);
+
+        return true;
+    }
 }
-
-dcCore::app()->addBehavior('adminBeforeBlogSettingsUpdate', function (dcSettings $blog_settings) {
-    $s = $blog_settings->addNamespace(basename(__DIR__));
-
-    try {
-        $s->put('disclaimer_active', isset($_POST['disclaimer_active']));
-        $s->put('disclaimer_remember', isset($_POST['disclaimer_remember']));
-        $s->put('disclaimer_redir', $_POST['disclaimer_redir'] ?? '');
-        $s->put('disclaimer_title', $_POST['disclaimer_title'] ?? '');
-        $s->put('disclaimer_text', $_POST['disclaimer_text'] ?? '');
-        $s->put('disclaimer_bots_unactive', isset($_POST['disclaimer_bots_unactive']));
-        $s->put('disclaimer_bots_agents', $_POST['disclaimer_bots_agents'] ?? '');
-    } catch (Exception $e) {
-        $s->drop('disclaimer_active');
-        $s->put('disclaimer_active', 0);
-    }
-});
-
-dcCore::app()->addBehavior('adminBlogPreferencesHeaders', function () {
-    $editor = dcCore::app()->auth->getOption('editor');
-
-    return
-        dcCore::app()->callBehavior('adminPostEditor', $editor['xhtml'], 'disclaimer', ['#disclaimer_text'], 'xhtml') .
-        dcPage::jsModuleLoad(basename(__DIR__) . '/js/admin.js');
-});
-
-dcCore::app()->addBehavior('adminBlogPreferencesFormV2', function (dcSettings $blog_settings) {
-    $s = $blog_settings->addNamespace(basename(__DIR__));
-
-    $disclaimer_bots_agents = $s->get('disclaimer_bots_agents');
-    if (empty($disclaimer_bots_agents)) {
-        $disclaimer_bots_agents = 'bot;Scooter;Slurp;Voila;WiseNut;Fast;Index;Teoma;' .
-        'Mirago;search;find;loader;archive;Spider;Crawler';
-    }
-
-    echo
-    '<div class="fieldset">' .
-    '<h4 id="disclaimerParam">' . __('Disclaimer') . '</h4>' .
-    '<div class="two-boxes">' .
-
-    '<p><label class="classic" for="disclaimer_active">' .
-    form::checkbox(
-        'disclaimer_active',
-        '1',
-        (bool) $s->get('disclaimer_active')
-    ) .
-    __('Enable disclaimer') . '</label></p>' .
-
-    '<p><label for="disclaimer_title">' . __('Title:') . '</label>' .
-    form::field(
-        'disclaimer_title',
-        30,
-        255,
-        html::escapeHTML((string) $s->get('disclaimer_title'))
-    ) .
-    '</p>' .
-
-    '</div><div class="two-boxes">' .
-
-    '<p><label class="classic">' .
-    form::checkbox(
-        'disclaimer_remember',
-        '1',
-        (bool) $s->get('disclaimer_remember')
-    ) .
-    __('Remember the visitor') . '</label></p>' .
-
-    '<p><label for="disclaimer_redir">' . __('Link output:') . '</label>' .
-    form::field(
-        'disclaimer_redir',
-        30,
-        255,
-        html::escapeHTML((string) $s->get('disclaimer_redir'))
-    ) . '</p>' .
-    '<p class="form-note info">' . __('Leave blank to redirect to the site Dotclear') . '</p>' .
-
-    '</div><div class="clear">' .
-
-    '<p class="area"><label for="disclaimer_text">' . __('Disclaimer:') . '</label>' .
-    form::textarea(
-        'disclaimer_text',
-        60,
-        5,
-        [
-            'default'    => html::escapeHTML((string) $s->get('disclaimer_text')),
-            'extra_html' => 'lang="' . dcCore::app()->blog->settings->get('system')->get('lang') . '" spellcheck="true"',
-        ]
-    ) . '</p>' .
-
-    '<p><label for="disclaimer_bots_agents">' . __('List of robots allowed to index the site pages (separated by semicolons):') . '</label>' .
-    form::field(
-        'disclaimer_bots_agents',
-        120,
-        255,
-        html::escapeHTML($disclaimer_bots_agents)
-    ) . '</p>' .
-
-    '<p><label for="disclaimer_bots_unactive">' .
-    form::checkbox(
-        'disclaimer_bots_unactive',
-        '1',
-        (bool) $s->get('disclaimer_bots_unactive')
-    ) .
-    __('Disable the authorization of indexing by search engines') .
-    '</label></p>' .
-
-    '</div>' .
-    '</div>';
-});
