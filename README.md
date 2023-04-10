@@ -3,7 +3,7 @@
 [![Release](https://img.shields.io/github/v/release/JcDenis/disclaimer)](https://github.com/JcDenis/disclaimer/releases)
 [![Date](https://img.shields.io/github/release-date/JcDenis/disclaimer)](https://github.com/JcDenis/disclaimer/releases)
 [![Issues](https://img.shields.io/github/issues/JcDenis/disclaimer)](https://github.com/JcDenis/disclaimer/issues)
-[![Dotclear](https://img.shields.io/badge/dotclear-v2.24-blue.svg)](https://fr.dotclear.org/download)
+[![Dotclear](https://img.shields.io/badge/dotclear-v2.26-blue.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-green.svg)](https://plugins.dotaddict.org/dc2/details/disclaimer)
 [![License](https://img.shields.io/github/license/JcDenis/disclaimer)](https://github.com/JcDenis/disclaimer/blob/master/LICENSE)
 
@@ -21,7 +21,7 @@ This plugin is inspired from plugin "Private mode"  by Osku.
  _disclaimer_ requires: 
 
   * admin permissions on blog
-  * Dotclear 2.24
+  * Dotclear 2.26
 
 ## USAGE
 

@@ -1,3 +1,7 @@
+1.1 - 2023.04.10
+* require dotclear 2.26
+* use namespace
+
 1.0 - 2022.12.21
 * update to dotclear 2.24
 * remove currywurst template

@@ -18,9 +18,9 @@ $this->registerModule(
     'Disclaimer',
     'Add a disclaimer to your blog entrance',
     'Jean-Christian Denis, Pierre Van Glabeke',
-    '1.0',
+    '1.1',
     [
-        'requires'    => [['core', '2.24']],
+        'requires'    => [['core', '2.26']],
         'permissions' => dcCore::app()->auth->makePermissions([
             dcAuth::PERMISSION_ADMIN,
         ]),
