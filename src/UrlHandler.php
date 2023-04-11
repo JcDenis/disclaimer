@@ -17,8 +17,8 @@ namespace Dotclear\Plugin\disclaimer;
 use dcCore;
 use dcUrlHandlers;
 use Dotclear\Helper\Network\Http;
+use Dotclear\Helper\Network\UrlHandler as HelperHandler;
 use sessionDB;
-use urlHandler as HelperHandler;
 
 /**
  * @ingroup DC_PLUGIN_DISCLAIMER
