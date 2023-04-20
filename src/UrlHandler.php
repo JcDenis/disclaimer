@@ -16,9 +16,9 @@ namespace Dotclear\Plugin\disclaimer;
 
 use dcCore;
 use dcUrlHandlers;
+use Dotclear\Database\Session;
 use Dotclear\Helper\Network\Http;
 use Dotclear\Helper\Network\UrlHandler as HelperHandler;
-use sessionDB;
 
 /**
  * @ingroup DC_PLUGIN_DISCLAIMER
@@ -81,7 +81,7 @@ class UrlHandler extends dcUrlHandlers
         ]);
 
         # Create session
-        $session = new sessionDB(
+        $session = new Session(
             dcCore::app()->con,
             dcCore::app()->prefix . 'session',
             My::SESSION_PREFIX . dcCore::app()->blog->id,
