@@ -45,6 +45,11 @@ class UrlHandler extends dcUrlHandlers
      */
     public static function publicBeforeDocumentV2(): void
     {
+        // nullsafe PHP < 8.0
+        if (is_null(dcCore::app()->blog)) {
+            return;
+        }
+
         $s = dcCore::app()->blog->settings->get(My::id());
 
         # Test user-agent to see if it is a bot

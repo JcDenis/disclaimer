@@ -34,6 +34,11 @@ class Frontend extends dcNsProcess
             return false;
         }
 
+        // nullsafe PHP < 8.0
+        if (is_null(dcCore::app()->blog)) {
+            return false;
+        }
+
         # Is active
         if (!dcCore::app()->blog->settings->get(My::id())->get('disclaimer_active')) {
             return false;

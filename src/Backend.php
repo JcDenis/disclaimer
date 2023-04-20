@@ -37,6 +37,7 @@ class Backend extends dcNsProcess
     {
         static::$init = defined('DC_CONTEXT_ADMIN')
             && My::phpCompliant()
+            && !is_null(dcCore::app()->auth) && !is_null(dcCore::app()->blog) // nullsafe PHP < 8.0
             && dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
                 dcCore::app()->auth::PERMISSION_CONTENT_ADMIN,
             ]), dcCore::app()->blog->id);
@@ -69,6 +70,10 @@ class Backend extends dcNsProcess
             },
 
             'adminBlogPreferencesHeaders' => function (): string {
+                // nullsafe PHP < 8.0
+                if (is_null(dcCore::app()->auth)) {
+                    return '';
+                }
                 $editor = dcCore::app()->auth->getOption('editor');
 
                 return
@@ -111,7 +116,7 @@ class Backend extends dcNsProcess
                     (new Div())->class('clear')->items([
                         (new Para())->items([
                             (new Label(__('Disclaimer:'), Label::OUTSIDE_LABEL_BEFORE))->for('disclaimer_text'),
-                            (new Textarea('disclaimer_text', Html::escapeHTML((string) $s->get('disclaimer_text'))))->cols(60)->rows(5)->lang(dcCore::app()->blog->settings->get('system')->get('lang'))->spellcheck(true),
+                            (new Textarea('disclaimer_text', Html::escapeHTML((string) $s->get('disclaimer_text'))))->cols(60)->rows(5)->lang($blog_settings->get('system')->get('lang'))->spellcheck(true),
                         ]),
                         (new Para())->items([
                             (new Label(__('List of robots allowed to index the site pages (separated by semicolons):')))->for('disclaimer_bots_agents'),
