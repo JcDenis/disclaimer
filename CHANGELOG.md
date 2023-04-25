@@ -1,3 +1,10 @@
+1.2 - 2023.04.25
+* require dotclear 2.26
+* fix message editor
+* fix nullsafe warnings
+* use latest dotclear namespaces
+* add plugin Uninstaller features
+
 1.1 - 2023.04.10
 * require dotclear 2.26
 * use namespace
