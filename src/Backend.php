@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\disclaimer;
 
+use ArrayObject;
 use dcCore;
 use dcPage;
 use dcNsProcess;
@@ -70,15 +71,13 @@ class Backend extends dcNsProcess
             },
 
             'adminBlogPreferencesHeaders' => function (): string {
-                // nullsafe PHP < 8.0
-                if (is_null(dcCore::app()->auth)) {
-                    return '';
-                }
-                $editor = dcCore::app()->auth->getOption('editor');
+                return dcPage::jsModuleLoad(My::id() . '/js/backend.js');
+            },
 
-                return
-                    dcCore::app()->callBehavior('adminPostEditor', $editor['xhtml'], 'disclaimer', ['#disclaimer_text'], 'xhtml') .
-                    dcPage::jsModuleLoad(My::id() . '/js/backend.js');
+            'adminPostEditorTags' => function (string $editor, string $context, ArrayObject $alt_tags, string $format): void {
+                if ($context == 'blog_desc') {
+                    $alt_tags->append('#disclaimer_text');
+                }
             },
 
             'adminBlogPreferencesFormV2' => function (dcSettings $blog_settings): void {
