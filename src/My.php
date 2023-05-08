@@ -17,14 +17,11 @@ namespace Dotclear\Plugin\disclaimer;
 use dcCore;
 
 /**
- * Plugin definitions
+ * This module definitions.
  */
 class My
 {
-    /** @var string Required php version */
-    public const PHP_MIN = '7.4';
-
-    /** @var array Default list of bots agents */
+    /** @var    array   Default list of bots agents */
     public const DEFAULT_BOTS_AGENTS = [
         'bot',
         'Scooter',
@@ -43,14 +40,17 @@ class My
         'Crawler',
     ];
 
-    /** @var string disclaimer specific cookie prefix */
+    /** @var    string  disclaimer specific cookie prefix */
     public const COOKIE_PREFIX = 'dc_disclaimer_cookie_';
 
-    /** @var string disclaimer specific session prefix */
+    /** @var    string  disclaimer specific session prefix */
     public const SESSION_PREFIX = 'dc_disclaimer_sess_';
 
+    /** @var    string  Required php version */
+    public const PHP_MIN = '7.4';
+
     /**
-     * This module id
+     * This module id.
      */
     public static function id(): string
     {
@@ -58,23 +58,25 @@ class My
     }
 
     /**
-     * This module name
+     * This module name.
      */
     public static function name(): string
     {
-        return __((string) dcCore::app()->plugins->moduleInfo(self::id(), 'name'));
+        $name = dcCore::app()->plugins->moduleInfo(self::id(), 'name');
+
+        return __(is_string($name) ? $name : self::id());
     }
 
     /**
-     * This mdoule directory
+     * This module path.
      */
-    public static function root(): string
+    public static function path(): string
     {
         return dirname(__DIR__);
     }
 
     /**
-     * Check php version
+     * Check this module PHP version compliant.
      */
     public static function phpCompliant(): bool
     {

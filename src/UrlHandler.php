@@ -71,10 +71,10 @@ class UrlHandler extends dcUrlHandlers
 
         # Set default-templates path for disclaimer files
         $tplset = dcCore::app()->themes->moduleInfo(dcCore::app()->blog->settings->get('system')->get('theme'), 'tplset');
-        if (!empty($tplset) && is_dir(My::root() . '/default-templates/' . $tplset)) {
-            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::root() . '/default-templates/' . $tplset);
+        if (!empty($tplset) && is_dir(My::path() . '/default-templates/' . $tplset)) {
+            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/default-templates/' . $tplset);
         } else {
-            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::root() . '/default-templates/' . DC_DEFAULT_TPLSET);
+            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/default-templates/' . DC_DEFAULT_TPLSET);
         }
 
         # New URL handler
