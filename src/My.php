@@ -46,9 +46,6 @@ class My
     /** @var    string  disclaimer specific session prefix */
     public const SESSION_PREFIX = 'dc_disclaimer_sess_';
 
-    /** @var    string  Required php version */
-    public const PHP_MIN = '7.4';
-
     /**
      * This module id.
      */
@@ -73,13 +70,5 @@ class My
     public static function path(): string
     {
         return dirname(__DIR__);
-    }
-
-    /**
-     * Check this module PHP version compliant.
-     */
-    public static function phpCompliant(): bool
-    {
-        return version_compare(phpversion(), self::PHP_MIN, '>=');
     }
 }
