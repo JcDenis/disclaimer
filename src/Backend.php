@@ -16,9 +16,8 @@ namespace Dotclear\Plugin\disclaimer;
 
 use ArrayObject;
 use dcCore;
-use dcPage;
-use dcNsProcess;
 use dcSettings;
+use Dotclear\Core\Process;
 use Dotclear\Helper\Html\Form\{
     Checkbox,
     Div,
@@ -32,22 +31,16 @@ use Dotclear\Helper\Html\Form\{
 use Dotclear\Helper\Html\Html;
 use Exception;
 
-class Backend extends dcNsProcess
+class Backend extends Process
 {
     public static function init(): bool
     {
-        static::$init = defined('DC_CONTEXT_ADMIN')
-            && !is_null(dcCore::app()->auth) && !is_null(dcCore::app()->blog) // nullsafe PHP < 8.0
-            && dcCore::app()->auth->check(dcCore::app()->auth->makePermissions([
-                dcCore::app()->auth::PERMISSION_CONTENT_ADMIN,
-            ]), dcCore::app()->blog->id);
-
-        return static::$init;
+        return self::status(My::checkContext(My::BACKEND));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
+        if (!self::status()) {
             return false;
         }
 
@@ -70,7 +63,7 @@ class Backend extends dcNsProcess
             },
 
             'adminBlogPreferencesHeaders' => function (): string {
-                return dcPage::jsModuleLoad(My::id() . '/js/backend.js');
+                return My::jsLoad('backend');
             },
 
             'adminPostEditorTags' => function (string $editor, string $context, ArrayObject $alt_tags, string $format): void {
@@ -89,7 +82,7 @@ class Backend extends dcNsProcess
 
                 echo
                 (new Div())->class('fieldset')->items([
-                    (new Text('h4', My::name()))->id('disclaimerParam'),
+                    (new Text('h4', My::name()))->id(My::id() . 'Param'),
                     (new Div())->class('two-boxes even')->items([
                         (new Para())->items([
                             (new Checkbox('disclaimer_active', (bool) $s->get('disclaimer_active')))->value(1),

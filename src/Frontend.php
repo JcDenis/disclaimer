@@ -16,31 +16,23 @@ namespace Dotclear\Plugin\disclaimer;
 
 use ArrayObject;
 use dcCore;
-use dcNsProcess;
-use dcUtils;
+use Dotclear\Core\Process;
 
-class Frontend extends dcNsProcess
+class Frontend extends Process
 {
     public static function init(): bool
     {
-        static::$init = defined('DC_RC_PATH');
-
-        return static::$init;
+        return self::status(My::checkContext(My::FRONTEND));
     }
 
     public static function process(): bool
     {
-        if (!static::$init) {
-            return false;
-        }
-
-        // nullsafe PHP < 8.0
-        if (is_null(dcCore::app()->blog)) {
+        if (!self::status()) {
             return false;
         }
 
         # Is active
-        if (!dcCore::app()->blog->settings->get(My::id())->get('disclaimer_active')) {
+        if (!My::settings()->get('disclaimer_active')) {
             return false;
         }
 
@@ -54,12 +46,12 @@ class Frontend extends dcNsProcess
         dcCore::app()->tpl->addValue('DisclaimerTitle', function (ArrayObject $attr): string {
             return '<?php echo ' . sprintf(
                 dcCore::app()->tpl->getFilters($attr),
-                'dcCore::app()->blog->settings->get("disclaimer")->get("disclaimer_title")'
+                My::class . '::settings()->get("disclaimer_title")'
             ) . '; ?>';
         });
 
         dcCore::app()->tpl->addValue('DisclaimerText', function (ArrayObject $attr): string {
-            return '<?php echo dcCore::app()->blog->settings->get("disclaimer")->get("disclaimer_text"); ?>';
+            return '<?php echo ' . My::class . '::settings()->get("disclaimer_text"); ?>';
         });
 
         dcCore::app()->tpl->addValue('DisclaimerFormURL', function (ArrayObject $attr): string {
@@ -69,7 +61,7 @@ class Frontend extends dcNsProcess
         # Behaviors
         dcCore::app()->addBehaviors([
             'publicHeadContent' => function (): void {
-                echo dcUtils::cssModuleLoad(My::id() . '/css/disclaimer.css');
+                echo My::cssLoad('disclaimer');
             },
             'publicBeforeDocumentV2' => [UrlHandler::class, 'publicBeforeDocumentV2'],
         ]);

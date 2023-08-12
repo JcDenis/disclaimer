@@ -14,12 +14,12 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\disclaimer;
 
-use dcCore;
+use Dotclear\Module\MyPlugin;
 
 /**
  * This module definitions.
  */
-class My
+class My extends MyPlugin
 {
     /** @var    array   Default list of bots agents */
     public const DEFAULT_BOTS_AGENTS = [
@@ -45,30 +45,4 @@ class My
 
     /** @var    string  disclaimer specific session prefix */
     public const SESSION_PREFIX = 'dc_disclaimer_sess_';
-
-    /**
-     * This module id.
-     */
-    public static function id(): string
-    {
-        return basename(dirname(__DIR__));
-    }
-
-    /**
-     * This module name.
-     */
-    public static function name(): string
-    {
-        $name = dcCore::app()->plugins->moduleInfo(self::id(), 'name');
-
-        return __(is_string($name) ? $name : self::id());
-    }
-
-    /**
-     * This module path.
-     */
-    public static function path(): string
-    {
-        return dirname(__DIR__);
-    }
 }

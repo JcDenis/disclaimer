@@ -50,7 +50,7 @@ class UrlHandler extends dcUrlHandlers
             return;
         }
 
-        $s = dcCore::app()->blog->settings->get(My::id());
+        $s = My::settings();
 
         # Test user-agent to see if it is a bot
         if (!$s->get('disclaimer_bots_unactive')) {
