@@ -1,22 +1,12 @@
 <?php
-/**
- * @brief disclaimer, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Jean-Christian Denis, Pierre Van Glabeke
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\disclaimer;
 
 use ArrayObject;
-use dcCore;
-use dcSettings;
+use Dotclear\App;
+use Dotclear\Core\BlogSettings;
 use Dotclear\Core\Process;
 use Dotclear\Helper\Html\Form\{
     Checkbox,
@@ -31,6 +21,13 @@ use Dotclear\Helper\Html\Form\{
 use Dotclear\Helper\Html\Html;
 use Exception;
 
+/**
+ * @brief       disclaimer backend class.
+ * @ingroup     disclaimer
+ *
+ * @author      Jean-Christian Denis (author)
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class Backend extends Process
 {
     public static function init(): bool
@@ -44,8 +41,8 @@ class Backend extends Process
             return false;
         }
 
-        dcCore::app()->addBehaviors([
-            'adminBeforeBlogSettingsUpdate' => function (dcSettings $blog_settings): void {
+        App::behavior()->addBehaviors([
+            'adminBeforeBlogSettingsUpdate' => function (BlogSettings $blog_settings): void {
                 $s = $blog_settings->get(My::id());
 
                 try {
@@ -72,7 +69,7 @@ class Backend extends Process
                 }
             },
 
-            'adminBlogPreferencesFormV2' => function (dcSettings $blog_settings): void {
+            'adminBlogPreferencesFormV2' => function (BlogSettings $blog_settings): void {
                 $s = $blog_settings->get(My::id());
 
                 $disclaimer_bots_agents = $s->get('disclaimer_bots_agents');

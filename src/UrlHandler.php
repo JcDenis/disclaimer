@@ -1,31 +1,23 @@
 <?php
-/**
- * @brief disclaimer, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Jean-Christian Denis, Pierre Van Glabeke
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\disclaimer;
 
-use dcCore;
-use dcUrlHandlers;
+use Dotclear\App;
+use Dotclear\Core\Frontend\Url;
 use Dotclear\Database\Session;
 use Dotclear\Helper\Network\Http;
 use Dotclear\Helper\Network\UrlHandler as HelperHandler;
 
 /**
- * @ingroup DC_PLUGIN_DISCLAIMER
- * @brief Public disclaimer - URL handler.
- * @since 2.6
+ * @brief       disclaimer frontend URL handler class.
+ * @ingroup     disclaimer
+ *
+ * @author      Jean-Christian Denis (author)
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-class UrlHandler extends dcUrlHandlers
+class UrlHandler extends Url
 {
     /**
      * Remove public callbacks (and serve disclaimer css)
@@ -45,8 +37,7 @@ class UrlHandler extends dcUrlHandlers
      */
     public static function publicBeforeDocumentV2(): void
     {
-        // nullsafe PHP < 8.0
-        if (is_null(dcCore::app()->blog)) {
+        if (!App::blog()->isDefined()) {
             return;
         }
 
@@ -70,37 +61,29 @@ class UrlHandler extends dcUrlHandlers
         }
 
         # Set default-templates path for disclaimer files
-        $tplset = dcCore::app()->themes->moduleInfo(dcCore::app()->blog->settings->get('system')->get('theme'), 'tplset');
+        $tplset = App::themes()->moduleInfo(App::blog()->settings()->get('system')->get('theme'), 'tplset');
         if (!empty($tplset) && is_dir(My::path() . '/default-templates/' . $tplset)) {
-            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/default-templates/' . $tplset);
+            App::frontend()->template()->setPath(App::frontend()->template()->getPath(), My::path() . '/default-templates/' . $tplset);
         } else {
-            dcCore::app()->tpl->setPath(dcCore::app()->tpl->getPath(), My::path() . '/default-templates/' . DC_DEFAULT_TPLSET);
+            App::frontend()->template()->setPath(App::frontend()->template()->getPath(), My::path() . '/default-templates/' . App::config()->defaultTplset());
         }
 
         # New URL handler
         $urlHandler       = new HelperHandler();
-        $urlHandler->mode = dcCore::app()->url->mode;
-        $urlHandler->registerDefault([
-            self::class,
-            'overwriteCallbacks',
-        ]);
+        $urlHandler->mode = App::url()->mode;
+        $urlHandler->registerDefault(self::overwriteCallbacks(...));
 
         # Create session
-        $session = new Session(
-            dcCore::app()->con,
-            dcCore::app()->prefix . 'session',
-            My::SESSION_PREFIX . dcCore::app()->blog->id,
-            '/'
-        );
+        $session = App::session()->createFromCookieName(My::SESSION_PREFIX . App::blog()->id());
         $session->start();
 
         # Remove all URLs representations
-        foreach (dcCore::app()->url->getTypes() as $k => $v) {
+        foreach (App::url()->getTypes() as $k => $v) {
             $urlHandler->register(
                 $k,
                 $v['url'],
                 $v['representation'],
-                [self::class, 'overwriteCallbacks']
+                self::overwriteCallbacks(...)
             );
         }
 
@@ -110,7 +93,7 @@ class UrlHandler extends dcUrlHandlers
         unset($urlHandler);
 
         # Test cookie
-        $cookie_name  = My::COOKIE_PREFIX . dcCore::app()->blog->id;
+        $cookie_name  = My::COOKIE_PREFIX . App::blog()->id();
         $cookie_value = empty($_COOKIE[$cookie_name]) || !$s->get('disclaimer_remember') ?
                 false : ($_COOKIE[$cookie_name]) == 1;
 

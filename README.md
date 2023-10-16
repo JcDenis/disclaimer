@@ -1,27 +1,22 @@
 # README
 
-[![Release](https://img.shields.io/badge/release-1.4-a2cbe9.svg)](https://git.dotclear.watch/JcDenis/disclaimer/releases)
-[![Date](https://img.shields.io/badge/date-2023.09.12-c44d58.svg)](https://git.dotclear.watch/JcDenis/disclaimer/releases)
-[![Dotclear](https://img.shields.io/badge/dotclear-v2.27-137bbb.svg)](https://fr.dotclear.org/download)
+[![Release](https://img.shields.io/badge/release-1.5-a2cbe9.svg)](https://git.dotclear.watch/JcDenis/disclaimer/releases)
+![Date](https://img.shields.io/badge/date-2023.10.15-c44d58.svg)
+[![Dotclear](https://img.shields.io/badge/dotclear-v2.28-137bbb.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-9ac123.svg)](https://plugins.dotaddict.org/dc2/details/disclaimer)
-[![License](https://img.shields.io/github/license/JcDenis/disclaimer)](https://git.dotclear.watch/JcDenis/disclaimer/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-GPL--2.0-ececec.svg)](https://git.dotclear.watch/JcDenis/disclaimer/src/branch/master/LICENSE)
 
-## WHAT IS  DISCLAIMER ?
+## ABOUT
 
-_disclaimer_  is a plugin for the open-source 
-web publishing software called Dotclear.
+_disclaimer_ is a plugin for the open-source web publishing software called [Dotclear](https://www.dotclear.org).
 
-It add a disclaimer to your blog entrance.
-
-This plugin is inspired from plugin "Private mode"  by Osku.
+> It add a disclaimer to your blog entrance. This plugin is inspired from plugin "Private mode"  by Osku.
 
 ## REQUIREMENTS
 
-_disclaimer_ requires: 
-
-* admin permissions on blog
-* Dotclear 2.27
-* PHP 7.4+
+* Dotclear 2.28
+* PHP 8.1+
+* Dotclear admin permissions on blog
 
 ## USAGE
 
@@ -32,10 +27,11 @@ You can activate and setup _disclaimer_ from blog preferences page.
 
 ## LINKS
 
-* License : [GNU GPL v2](https://www.gnu.org/licenses/old-licenses/lgpl-2.0.html)
-* Source & contribution : [Gitea Page](https://git.dotclear.watch/JcDenis/disclaimer) or [GitHub Page](https://github.com/JcDenis/disclaimer)
-* Packages & details : [Gitea Page](https://git.dotclear.watch/JcDenis/disclaimer/releases) or [Dotaddict Page](https://plugins.dotaddict.org/dc2/details/disclaimer)
-* Help & discuss : [Dotclear forum](http://forum.dotclear.org/viewtopic.php?id=40000)
+* [License](https://git.dotclear.watch/JcDenis/disclaimer/src/branch/master/LICENSE)
+* [Packages & details](https://git.dotclear.watch/JcDenis/disclaimer/releases) (or on [Dotaddict](https://plugins.dotaddict.org/dc2/details/disclaimer))
+* [Sources & contributions](https://git.dotclear.watch/JcDenis/disclaimer) (or on [GitHub](https://github.com/JcDenis/disclaimer))
+* [Issues & security](https://git.dotclear.watch/JcDenis/disclaimer/issues) (or on [GitHub](https://github.com/JcDenis/disclaimer/issues))
+* [Help & discuss](http://forum.dotclear.org/viewtopic.php?id=40000)
 
 ## CONTRIBUTORS
 

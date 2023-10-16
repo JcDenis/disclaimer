@@ -1,15 +1,5 @@
 <?php
-/**
- * @brief disclaimer, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Jean-Christian Denis, Pierre Van Glabeke
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\disclaimer;
@@ -17,11 +7,19 @@ namespace Dotclear\Plugin\disclaimer;
 use Dotclear\Module\MyPlugin;
 
 /**
- * This module definitions.
+ * @brief       disclaimer My helper.
+ * @ingroup     disclaimer
+ *
+ * @author      Jean-Christian Denis (author)
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
 class My extends MyPlugin
 {
-    /** @var    array   Default list of bots agents */
+    /**
+     * Default list of bots agents.
+     *
+     * @var     array   DEFAULT_BOTS_AGENTS
+     */
     public const DEFAULT_BOTS_AGENTS = [
         'bot',
         'Scooter',
@@ -40,9 +38,19 @@ class My extends MyPlugin
         'Crawler',
     ];
 
-    /** @var    string  disclaimer specific cookie prefix */
+    /**
+     * disclaimer specific cookie prefix.
+     *
+     * @var     string  COOKIE_PREFIX
+     */
     public const COOKIE_PREFIX = 'dc_disclaimer_cookie_';
 
-    /** @var    string  disclaimer specific session prefix */
+    /**
+     * disclaimer specific session prefix.
+     *
+     * @var     string  SESSION_PREFIX
+     */
     public const SESSION_PREFIX = 'dc_disclaimer_sess_';
+
+    // Use default permissions
 }

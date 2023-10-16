@@ -1,23 +1,20 @@
 <?php
-/**
- * @brief disclaimer, a plugin for Dotclear 2
- *
- * @package Dotclear
- * @subpackage Plugin
- *
- * @author Jean-Christian Denis, Pierre Van Glabeke
- *
- * @copyright Jean-Christian Denis
- * @copyright GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
- */
+
 declare(strict_types=1);
 
 namespace Dotclear\Plugin\disclaimer;
 
 use ArrayObject;
-use dcCore;
+use Dotclear\App;
 use Dotclear\Core\Process;
 
+/**
+ * @brief       disclaimer frontend class.
+ * @ingroup     disclaimer
+ *
+ * @author      Jean-Christian Denis (author)
+ * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
+ */
 class Frontend extends Process
 {
     public static function init(): bool
@@ -43,27 +40,27 @@ class Frontend extends Process
         __('I disagree');
 
         # Templates
-        dcCore::app()->tpl->addValue('DisclaimerTitle', function (ArrayObject $attr): string {
+        App::frontend()->template()->addValue('DisclaimerTitle', function (ArrayObject $attr): string {
             return '<?php echo ' . sprintf(
-                dcCore::app()->tpl->getFilters($attr),
+                App::frontend()->template()->getFilters($attr),
                 My::class . '::settings()->get("disclaimer_title")'
             ) . '; ?>';
         });
 
-        dcCore::app()->tpl->addValue('DisclaimerText', function (ArrayObject $attr): string {
+        App::frontend()->template()->addValue('DisclaimerText', function (ArrayObject $attr): string {
             return '<?php echo ' . My::class . '::settings()->get("disclaimer_text"); ?>';
         });
 
-        dcCore::app()->tpl->addValue('DisclaimerFormURL', function (ArrayObject $attr): string {
-            return '<?php dcCore::app()->blog->url; ?>';
+        App::frontend()->template()->addValue('DisclaimerFormURL', function (ArrayObject $attr): string {
+            return '<?php App::blog()->url(); ?>';
         });
 
         # Behaviors
-        dcCore::app()->addBehaviors([
+        App::behavior()->addBehaviors([
             'publicHeadContent' => function (): void {
                 echo My::cssLoad('disclaimer');
             },
-            'publicBeforeDocumentV2' => [UrlHandler::class, 'publicBeforeDocumentV2'],
+            'publicBeforeDocumentV2' => UrlHandler::publicBeforeDocumentV2(...),
         ]);
 
         return true;
