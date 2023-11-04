@@ -6,7 +6,6 @@ namespace Dotclear\Plugin\disclaimer;
 
 use ArrayObject;
 use Dotclear\App;
-use Dotclear\Core\BlogSettings;
 use Dotclear\Core\Process;
 use Dotclear\Helper\Html\Form\{
     Checkbox,
@@ -19,6 +18,7 @@ use Dotclear\Helper\Html\Form\{
     Textarea
 };
 use Dotclear\Helper\Html\Html;
+use Dotclear\Interface\Core\BlogSettingsInterface;
 use Exception;
 
 /**
@@ -42,7 +42,7 @@ class Backend extends Process
         }
 
         App::behavior()->addBehaviors([
-            'adminBeforeBlogSettingsUpdate' => function (BlogSettings $blog_settings): void {
+            'adminBeforeBlogSettingsUpdate' => function (BlogSettingsInterface $blog_settings): void {
                 $s = $blog_settings->get(My::id());
 
                 try {
@@ -69,7 +69,7 @@ class Backend extends Process
                 }
             },
 
-            'adminBlogPreferencesFormV2' => function (BlogSettings $blog_settings): void {
+            'adminBlogPreferencesFormV2' => function (BlogSettingsInterface $blog_settings): void {
                 $s = $blog_settings->get(My::id());
 
                 $disclaimer_bots_agents = $s->get('disclaimer_bots_agents');
@@ -87,7 +87,7 @@ class Backend extends Process
                         ]),
                         (new Para())->items([
                             (new Label(__('Title:')))->for('disclaimer_title'),
-                            (new Input('disclaimer_title'))->size(30)->maxlenght(255)->value(Html::escapeHTML((string) $s->get('disclaimer_title'))),
+                            (new Input('disclaimer_title'))->size(30)->maxlength(255)->value(Html::escapeHTML((string) $s->get('disclaimer_title'))),
                         ]),
                     ]),
                     (new Div())->class('two-boxes odd')->items([
@@ -97,7 +97,7 @@ class Backend extends Process
                         ]),
                         (new Para())->items([
                             (new Label(__('Link output:')))->for('disclaimer_redir'),
-                            (new Input('disclaimer_redir'))->size(30)->maxlenght(255)->value(Html::escapeHTML((string) $s->get('disclaimer_redir'))),
+                            (new Input('disclaimer_redir'))->size(30)->maxlength(255)->value(Html::escapeHTML((string) $s->get('disclaimer_redir'))),
                         ]),
                         (new Note())->class('form-note')->text(__('Leave blank to redirect to the site Dotclear')),
                     ]),
@@ -108,7 +108,7 @@ class Backend extends Process
                         ]),
                         (new Para())->items([
                             (new Label(__('List of robots allowed to index the site pages (separated by semicolons):')))->for('disclaimer_bots_agents'),
-                            (new Input('disclaimer_bots_agents'))->size(120)->maxlenght(255)->value(Html::escapeHTML($disclaimer_bots_agents)),
+                            (new Input('disclaimer_bots_agents'))->size(120)->maxlength(255)->value(Html::escapeHTML($disclaimer_bots_agents)),
                         ]),
                         (new Para())->items([
                             (new Checkbox('disclaimer_bots_unactive', (bool) $s->get('disclaimer_bots_unactive')))->value(1),
