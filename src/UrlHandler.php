@@ -61,12 +61,11 @@ class UrlHandler extends Url
         }
 
         # Set default-templates path for disclaimer files
-        $tplset = App::themes()->moduleInfo(App::blog()->settings()->get('system')->get('theme'), 'tplset');
-        if (!empty($tplset) && is_dir(My::path() . '/default-templates/' . $tplset)) {
-            App::frontend()->template()->setPath(App::frontend()->template()->getPath(), My::path() . '/default-templates/' . $tplset);
-        } else {
-            App::frontend()->template()->setPath(App::frontend()->template()->getPath(), My::path() . '/default-templates/' . App::config()->defaultTplset());
+        $tplset = App::themes()->getDefine(App::blog()->settings()->get('system')->get('theme'))->get('tplset');
+        if (empty($tplset) || !is_dir(implode(DIRECTORY_SEPARATOR, [My::path(), 'default-templates', $tplset]))) {
+            $tplset = App::config()->defaultTplset();
         }
+        App::frontend()->template()->appendPath(implode(DIRECTORY_SEPARATOR, [My::path(), 'default-templates', $tplset]));
 
         # New URL handler
         $urlHandler       = new HelperHandler();
