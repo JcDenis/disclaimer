@@ -4,7 +4,7 @@
 ![Date](https://img.shields.io/github/release-date/jcdenis/disclaimer?color=red)
 [![Dotclear](https://img.shields.io/badge/dotclear-v2.33-137bbb.svg)](https://fr.dotclear.org/download)
 [![Dotaddict](https://img.shields.io/badge/dotaddict-official-9ac123.svg)](https://plugins.dotaddict.org/dc2/details/disclaimer)
-[![License](https://img.shields.io/github/license/jcdenis/disclaimer?color=white)](https://github.com/JcDenis/disclaimer/src/branch/master/LICENSE)
+[![License](https://img.shields.io/github/license/jcdenis/disclaimer?color=white)](https://github.com/JcDenis/disclaimer/blob/master/LICENSE)
 
 ## ABOUT
 
@@ -27,7 +27,7 @@ You can activate and setup _disclaimer_ from blog preferences page.
 
 ## LINKS
 
-* [License](https://github.com/JcDenis/disclaimer/src/branch/master/LICENSE)
+* [License](https://github.com/JcDenis/disclaimer/blob/master/LICENSE)
 * [Packages & details](https://github.com/JcDenis/disclaimer/releases) (or on [Dotaddict](https://plugins.dotaddict.org/dc2/details/disclaimer))
 * [Sources & contributions](https://github.com/JcDenis/disclaimer)
 * [Issues & security](https://github.com/JcDenis/disclaimer/issues)
