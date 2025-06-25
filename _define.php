@@ -17,11 +17,11 @@ $this->registerModule(
     'Disclaimer',
     'Add a disclaimer to your blog entrance',
     'Jean-Christian Denis, Pierre Van Glabeke',
-    '1.5.2',
+    '1.5.3',
     [
         'requires'    => [['core', '2.28']],
         'permissions' => 'My',
-        'settings'    => ['blog' => '#params.' . $this->id . 'Param'],
+        'settings'    => ['blog' => '#params.' . $this->id . '_params'],
         'type'        => 'plugin',
         'support'     => 'https://github.com/JcDenis/' . $this->id . '/issues',
         'details'     => 'https://github.com/JcDenis/' . $this->id . '/',
