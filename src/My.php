@@ -18,7 +18,7 @@ class My extends MyPlugin
     /**
      * Default list of bots agents.
      *
-     * @var     array   DEFAULT_BOTS_AGENTS
+     * @var     array<int, string>  DEFAULT_BOTS_AGENTS
      */
     public const DEFAULT_BOTS_AGENTS = [
         'bot',
