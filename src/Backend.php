@@ -4,22 +4,12 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\disclaimer;
 
-use ArrayObject;
+use ArrayObject, Exception;
 use Dotclear\App;
 use Dotclear\Core\Process;
-use Dotclear\Helper\Html\Form\{
-    Checkbox,
-    Div,
-    Label,
-    Input,
-    Note,
-    Para,
-    Text,
-    Textarea
-};
+use Dotclear\Helper\Html\Form\{ Checkbox, Div, Fieldset, Label, Legend, Img, Input, Note, Para, Textarea };
 use Dotclear\Helper\Html\Html;
 use Dotclear\Interface\Core\BlogSettingsInterface;
-use Exception;
 
 /**
  * @brief       disclaimer backend class.
@@ -78,8 +68,8 @@ class Backend extends Process
                 }
 
                 echo
-                (new Div())->class('fieldset')->items([
-                    (new Text('h4', My::name()))->id(My::id() . 'Param'),
+                (new Fieldset(My::id() . '_params'))
+                    ->legend(new Legend((new Img(My::icons()[0]))->class('icon-small')->render() . ' ' . My::name()))->items([
                     (new Div())->class('two-boxes even')->items([
                         (new Para())->items([
                             (new Checkbox('disclaimer_active', (bool) $s->get('disclaimer_active')))->value(1),
