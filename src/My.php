@@ -45,12 +45,5 @@ class My extends MyPlugin
      */
     public const COOKIE_PREFIX = 'dc_disclaimer_cookie_';
 
-    /**
-     * disclaimer specific session prefix.
-     *
-     * @var     string  SESSION_PREFIX
-     */
-    public const SESSION_PREFIX = 'dc_disclaimer_sess_';
-
     // Use default permissions
 }

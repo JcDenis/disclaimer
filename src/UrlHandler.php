@@ -6,7 +6,6 @@ namespace Dotclear\Plugin\disclaimer;
 
 use Dotclear\App;
 use Dotclear\Core\Frontend\Url;
-use Dotclear\Database\Session;
 use Dotclear\Helper\Network\Http;
 use Dotclear\Helper\Network\UrlHandler as HelperHandler;
 
@@ -72,9 +71,8 @@ class UrlHandler extends Url
         $urlHandler->mode = App::url()->mode;
         $urlHandler->registerDefault(self::overwriteCallbacks(...));
 
-        # Create session
-        $session = App::session()->createFromCookieName(My::SESSION_PREFIX . App::blog()->id());
-        $session->start();
+        # Start session if not
+        App::session()->start();
 
         # Remove all URLs representations
         foreach (App::url()->getTypes() as $k => $v) {
@@ -98,7 +96,7 @@ class UrlHandler extends Url
 
         # User say "disagree" so go away
         if (isset($_POST['disclaimerdisagree'])) {
-            $session->destroy();
+            App::session()->destroy();
             if ($s->get('disclaimer_remember')) {
                 setcookie($cookie_name, '0', time() - 86400, '/');
             }
@@ -131,7 +129,7 @@ class UrlHandler extends Url
                 return;
             }
 
-            $session->destroy();
+            App::session()->destroy();
             self::serveDocument('disclaimer.html', 'text/html', false);
             exit;
         }
