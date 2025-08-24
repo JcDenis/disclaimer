@@ -1,3 +1,8 @@
+disclaimer 1.5 - 2025.08.24
+===========================================================
+* Bump Dotclear from 2.28 to 2.36
+* Use session from Dotclear 2.36
+
 disclaimer 1.5.3 - 2025.06.26
 ===========================================================
 * Standardize backend blocs

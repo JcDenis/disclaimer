@@ -17,9 +17,9 @@ $this->registerModule(
     'Disclaimer',
     'Add a disclaimer to your blog entrance',
     'Jean-Christian Denis, Pierre Van Glabeke',
-    '1.5.4',
+    '1.6',
     [
-        'requires'    => [['core', '2.28']],
+        'requires'    => [['core', '2.36']],
         'permissions' => 'My',
         'settings'    => ['blog' => '#params.' . $this->id . '_params'],
         'type'        => 'plugin',
