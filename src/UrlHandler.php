@@ -86,50 +86,27 @@ class UrlHandler extends Url
 
         # Get type
         $urlHandler->getDocument();
-        $type = $urlHandler->type;
         unset($urlHandler);
-
-        # Test cookie
-        $cookie_name  = My::COOKIE_PREFIX . App::blog()->id();
-        $cookie_value = empty($_COOKIE[$cookie_name]) || !$s->get('disclaimer_remember') ?
-                false : ($_COOKIE[$cookie_name]) == 1;
 
         # User say "disagree" so go away
         if (isset($_POST['disclaimerdisagree'])) {
             App::session()->destroy();
-            if ($s->get('disclaimer_remember')) {
-                setcookie($cookie_name, '0', time() - 86400, '/');
-            }
             $redir = $s->get('disclaimer_redir');
             if (!$redir) {
                 $redir = 'http://www.dotclear.org';
             }
             Http::redirect($redir);
             exit;
-        }
-
-        # Check if user say yes before
-        elseif (!isset($_SESSION['sess_blog_disclaimer'])
-         || $_SESSION['sess_blog_disclaimer'] != 1
+        # User say or said yes
+        } elseif (isset($_POST['disclaimeragree'])
+            || !empty($_SESSION['sess_blog_disclaimer'])
         ) {
-            if ($s->get('disclaimer_remember')
-             && $cookie_value != false
-            ) {
-                $_SESSION['sess_blog_disclaimer'] = 1;
+            $_SESSION['sess_blog_disclaimer'] = 1;
 
-                return;
-            }
-            if (!empty($_POST['disclaimeragree'])) {
-                $_SESSION['sess_blog_disclaimer'] = 1;
-
-                if ($s->get('disclaimer_remember')) {
-                    setcookie($cookie_name, '1', time() + 31536000, '/');
-                }
-
-                return;
-            }
-
-            App::session()->destroy();
+            return;
+        # User never said agree
+        } else {
+            $_SESSION['sess_blog_disclaimer'] = 0;
             self::serveDocument('disclaimer.html', 'text/html', false);
             exit;
         }

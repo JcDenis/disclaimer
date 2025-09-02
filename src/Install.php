@@ -37,12 +37,6 @@ class Install extends Process
                 'boolean',
             ],
             [
-                'disclaimer_remember',
-                'Remember the visitor who has already accepted the terms',
-                false,
-                'boolean',
-            ],
-            [
                 'disclaimer_redir',
                 'Redirection if disclaimer is refused',
                 'https://www.google.fr',

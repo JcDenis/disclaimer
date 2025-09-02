@@ -37,7 +37,6 @@ class Backend extends Process
 
                 try {
                     $s->put('disclaimer_active', isset($_POST['disclaimer_active']));
-                    $s->put('disclaimer_remember', isset($_POST['disclaimer_remember']));
                     $s->put('disclaimer_redir', $_POST['disclaimer_redir'] ?? '');
                     $s->put('disclaimer_title', $_POST['disclaimer_title'] ?? '');
                     $s->put('disclaimer_text', $_POST['disclaimer_text'] ?? '');
@@ -81,10 +80,6 @@ class Backend extends Process
                         ]),
                     ]),
                     (new Div())->class('two-boxes odd')->items([
-                        (new Para())->items([
-                            (new Checkbox('disclaimer_remember', (bool) $s->get('disclaimer_remember')))->value(1),
-                            (new Label(__('Remember the visitor'), Label::OUTSIDE_LABEL_AFTER))->for('disclaimer_remember')->class('classic'),
-                        ]),
                         (new Para())->items([
                             (new Label(__('Link output:')))->for('disclaimer_redir'),
                             (new Input('disclaimer_redir'))->size(30)->maxlength(255)->value(Html::escapeHTML((string) $s->get('disclaimer_redir'))),

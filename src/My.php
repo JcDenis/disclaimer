@@ -38,12 +38,5 @@ class My extends MyPlugin
         'Crawler',
     ];
 
-    /**
-     * disclaimer specific cookie prefix.
-     *
-     * @var     string  COOKIE_PREFIX
-     */
-    public const COOKIE_PREFIX = 'dc_disclaimer_cookie_';
-
     // Use default permissions
 }
