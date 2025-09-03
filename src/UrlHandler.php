@@ -99,14 +99,14 @@ class UrlHandler extends Url
             exit;
         # User say or said yes
         } elseif (isset($_POST['disclaimeragree'])
-            || !empty($_SESSION['sess_blog_disclaimer'])
+            || App::session()->get('sess_blog_disclaimer') != ''
         ) {
-            $_SESSION['sess_blog_disclaimer'] = 1;
+            App::session()->set('sess_blog_disclaimer', 1);
 
             return;
         # User never said agree
         } else {
-            $_SESSION['sess_blog_disclaimer'] = 0;
+            App::session()->set('sess_blog_disclaimer', 0);
             self::serveDocument('disclaimer.html', 'text/html', false);
             exit;
         }
