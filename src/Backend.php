@@ -6,7 +6,7 @@ namespace Dotclear\Plugin\disclaimer;
 
 use ArrayObject, Exception;
 use Dotclear\App;
-use Dotclear\Core\Process;
+use Dotclear\Helper\Process\TraitProcess;
 use Dotclear\Helper\Html\Form\{ Checkbox, Div, Fieldset, Label, Legend, Img, Input, Note, Para, Textarea };
 use Dotclear\Helper\Html\Html;
 use Dotclear\Interface\Core\BlogSettingsInterface;
@@ -18,8 +18,10 @@ use Dotclear\Interface\Core\BlogSettingsInterface;
  * @author      Jean-Christian Denis (author)
  * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-class Backend extends Process
+class Backend
 {
+    use TraitProcess;
+
     public static function init(): bool
     {
         return self::status(My::checkContext(My::BACKEND));
