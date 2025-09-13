@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Dotclear\Plugin\disclaimer;
 
 use Dotclear\App;
-use Dotclear\Core\Url;
 use Dotclear\Helper\Network\Http;
 use Dotclear\Helper\Network\UrlHandler as HelperHandler;
 
@@ -16,7 +15,7 @@ use Dotclear\Helper\Network\UrlHandler as HelperHandler;
  * @author      Jean-Christian Denis (author)
  * @copyright   GPL-2.0 https://www.gnu.org/licenses/gpl-2.0.html
  */
-class UrlHandler extends Url
+class UrlHandler
 {
     /**
      * Remove public callbacks (and serve disclaimer css)
@@ -26,7 +25,7 @@ class UrlHandler extends Url
     public static function overwriteCallbacks(?string $args): void
     {
         if ($args == 'disclaimer.css') {
-            self::serveDocument('disclaimer.css', 'text/css', false);
+            App::url()::serveDocument('disclaimer.css', 'text/css', false);
             exit;
         }
     }
@@ -107,7 +106,7 @@ class UrlHandler extends Url
         # User never said agree
         } else {
             App::session()->set('sess_blog_disclaimer', 0);
-            self::serveDocument('disclaimer.html', 'text/html', false);
+            App::url()::serveDocument('disclaimer.html', 'text/html', false);
             exit;
         }
     }
