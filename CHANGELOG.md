@@ -1,3 +1,8 @@
+disclaimer 1.x - xxxx.xx.xx
+===========================================================
+* Bump Dotclear from 2.36 to 2.39
+* Code review (phpstan max)
+
 disclaimer 1.7 - 2025.09.09
 ===========================================================
 * Use TraitProcess

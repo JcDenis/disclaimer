@@ -31,7 +31,7 @@ class Frontend
         }
 
         # Is active
-        if (!My::settings()->get('disclaimer_active')) {
+        if (!My::settings()->getBool('disclaimer_active', false)) {
             return false;
         }
 
@@ -45,12 +45,12 @@ class Frontend
         App::frontend()->template()->addValue('DisclaimerTitle', function (ArrayObject $attr): string {
             return '<?php echo ' . sprintf(
                 App::frontend()->template()->getFilters($attr),
-                My::class . '::settings()->get("disclaimer_title")'
+                My::class . '::settings()->getStr("disclaimer_title", false)'
             ) . '; ?>';
         });
 
         App::frontend()->template()->addValue('DisclaimerText', function (ArrayObject $attr): string {
-            return '<?php echo ' . My::class . '::settings()->get("disclaimer_text"); ?>';
+            return '<?php echo ' . My::class . '::settings()->getStr("disclaimer_text", false); ?>';
         });
 
         App::frontend()->template()->addValue('DisclaimerFormURL', function (ArrayObject $attr): string {

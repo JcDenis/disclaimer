@@ -39,16 +39,14 @@ class UrlHandler
             return;
         }
 
-        $s = My::settings();
-
         # Test user-agent to see if it is a bot
-        if (!$s->get('disclaimer_bots_unactive')) {
-            $bots_agents = $s->get('diclaimer_bots_agents');
-            $bots_agents = !$bots_agents ? My::DEFAULT_BOTS_AGENTS : explode(';', $bots_agents);
+        if (!My::settings()->getBool('disclaimer_bots_unactive', false)) {
+            $bots_agents = My::settings()->getStr('diclaimer_bots_agents', false);
+            $bots_agents = $bots_agents === '' ? My::DEFAULT_BOTS_AGENTS : explode(';', $bots_agents);
 
             $is_bot = false;
             foreach ($bots_agents as $bot) {
-                if (stristr($_SERVER['HTTP_USER_AGENT'], $bot)) {
+                if (isset($_SERVER['HTTP_USER_AGENT']) && is_string($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], $bot)) {
                     $is_bot = true;
                 }
             }
@@ -59,15 +57,15 @@ class UrlHandler
         }
 
         # Set default-templates path for disclaimer files
-        $tplset = App::themes()->getDefine(App::blog()->settings()->get('system')->get('theme'))->get('tplset');
-        if (empty($tplset) || !is_dir(implode(DIRECTORY_SEPARATOR, [My::path(), 'default-templates', $tplset]))) {
+        $tplset = App::themes()->getDefine(App::blog()->settings()->get('system')->getStr('theme', false))->get('tplset');
+        if (!is_string($tplset) || empty($tplset) || !is_dir(implode(DIRECTORY_SEPARATOR, [My::path(), 'default-templates', $tplset]))) {
             $tplset = App::config()->defaultTplset();
         }
         App::frontend()->template()->appendPath(implode(DIRECTORY_SEPARATOR, [My::path(), 'default-templates', $tplset]));
 
         # New URL handler
-        $urlHandler       = new HelperHandler();
-        $urlHandler->mode = App::url()->mode;
+        $urlHandler = new HelperHandler();
+        $urlHandler->setMode(App::url()->getMode());
         $urlHandler->registerDefault(self::overwriteCallbacks(...));
 
         # Start session if not
@@ -90,8 +88,8 @@ class UrlHandler
         # User say "disagree" so go away
         if (isset($_POST['disclaimerdisagree'])) {
             App::session()->destroy();
-            $redir = $s->get('disclaimer_redir');
-            if (!$redir) {
+            $redir = My::settings()->getStr('disclaimer_redir', false);
+            if ($redir === '') {
                 $redir = 'http://www.dotclear.org';
             }
             Http::redirect($redir);
