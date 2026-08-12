@@ -1,4 +1,4 @@
-disclaimer 1.x - xxxx.xx.xx
+disclaimer 1.8 - 2026.08.12
 ===========================================================
 * Bump Dotclear from 2.36 to 2.39
 * Code review (phpstan max)
