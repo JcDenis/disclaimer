@@ -1,3 +1,8 @@
+disclaimer 1.9 - 2026.11.11
+===========================================================
+* Add TODO about API calls blocked by disclaimer
+* Fix disclaimer blocking API calls
+
 disclaimer 1.8 - 2026.08.12
 ===========================================================
 * Bump Dotclear from 2.36 to 2.39
