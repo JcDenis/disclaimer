@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dotclear\Plugin\disclaimer;
 
+use ArrayObject;
 use Dotclear\App;
 use Dotclear\Helper\Network\Http;
 use Dotclear\Helper\Network\UrlHandler as HelperHandler;
@@ -17,6 +18,17 @@ use Dotclear\Helper\Network\UrlHandler as HelperHandler;
  */
 class UrlHandler
 {
+    /**
+     * URL types never served behind the disclaimer.
+     *
+     * Plugins can complete this list with the behavior "disclaimerExcludedUrlTypes".
+     *
+     * @var     array<int, string>  EXCLUDED_URL_TYPES
+     */
+    public const EXCLUDED_URL_TYPES = [
+        'ApiServer',
+    ];
+
     /**
      * Remove public callbacks (and serve disclaimer css)
      *
@@ -41,7 +53,7 @@ class UrlHandler
 
         # Test user-agent to see if it is a bot
         if (!My::settings()->getBool('disclaimer_bots_unactive', false)) {
-            $bots_agents = My::settings()->getStr('diclaimer_bots_agents', false);
+            $bots_agents = My::settings()->getStr('disclaimer_bots_agents', false);
             $bots_agents = $bots_agents === '' ? My::DEFAULT_BOTS_AGENTS : explode(';', $bots_agents);
 
             $is_bot = false;
@@ -68,9 +80,6 @@ class UrlHandler
         $urlHandler->setMode(App::url()->getMode());
         $urlHandler->registerDefault(self::overwriteCallbacks(...));
 
-        # Start session if not
-        App::session()->start();
-
         # Remove all URLs representations
         foreach (App::url()->getTypes() as $k => $v) {
             $urlHandler->register(
@@ -83,7 +92,18 @@ class UrlHandler
 
         # Get type
         $urlHandler->getDocument();
+        $type = $urlHandler->getType();
         unset($urlHandler);
+
+        # Excluded URL types (API, …) are served as usual
+        $excluded_types = new ArrayObject(self::EXCLUDED_URL_TYPES);
+        App::behavior()->callBehavior('disclaimerExcludedUrlTypes', $excluded_types);
+        if (in_array($type, $excluded_types->getArrayCopy(), true)) {
+            return;
+        }
+
+        # Start session if not
+        App::session()->start();
 
         # User say "disagree" so go away
         if (isset($_POST['disclaimerdisagree'])) {

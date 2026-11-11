@@ -37,6 +37,7 @@ You can activate and setup _disclaimer_ from blog preferences page.
 
 * Jean-Christian Denis (author)
 * Pierre Van Glabeke
+* Claude (AI assistant by Anthropic)
 
 You are welcome to contribute to this code.
 
@@ -79,6 +80,23 @@ le disclaimer.
 
 Permet de désactiver la fonction de recherche de user-agent et de rediriger
 tous les user-agent vers le disclaimer.
+
+### Adresses exclues
+
+Certaines adresses du blog ne passent jamais par le disclaimer, comme
+celles de l'API du plugin _ApiServer_ (utilisée par DotclearWatch,
+daContribute, ClaudetteMcp…) : leurs clients ne peuvent pas accepter
+l'avertissement.
+
+Un plugin peut exclure ses propres types d'URL avec le behavior
+`disclaimerExcludedUrlTypes`, qui reçoit la liste (ArrayObject) des types
+exclus :
+
+```php
+App::behavior()->addBehavior('disclaimerExcludedUrlTypes', function (ArrayObject $types): void {
+    $types[] = 'myUrlType';
+});
+```
 
 ### Templates
 
