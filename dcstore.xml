@@ -7,7 +7,7 @@
     <desc>Add a disclaimer to your blog entrance</desc>
     <file>https://github.com/JcDenis/disclaimer/releases/download/v1.9/plugin-disclaimer.zip</file>
     <da:dcmin>2.39</da:dcmin>
-    <da:details>https://github.com/JcDenis/disclaimer/src/branch/master/README.md</da:details>
+    <da:details>https://github.com/JcDenis/disclaimer/blob/master/README.md</da:details>
     <da:support>https://github.com/JcDenis/disclaimer/issues</da:support>
   </module>
 </modules>
