@@ -30,7 +30,7 @@ Il sert par exemple pour un blog réservé aux adultes ou soumis à des conditio
 
 * _Activer l'avertissement_ : met l'avertissement en service. Tant que la case est décochée, le blog est ouvert à tous.
 * _Titre_ : le titre de la page d'avertissement.
-* _Lien de sortie_ : l'adresse où part le visiteur qui refuse. Laissez vide pour l'envoyer sur `http://www.dotclear.org`.
+* _Lien de sortie_ : l'adresse où part le visiteur qui refuse, en `http://` ou `https://`. Laissez vide pour l'envoyer sur `https://www.dotclear.org`. Une adresse invalide n'est pas enregistrée : un message le signale et l'ancienne adresse est gardée.
 * _Avertissement_ : le texte affiché. L'éditeur de billets s'applique à ce champ s'il est actif.
 * _Liste des robots autorisés à indexer les pages du site_ : voir plus bas.
 * _Désactiver l'autorisation d'indexation par les moteurs de recherches_ : voir plus bas.
@@ -70,9 +70,9 @@ Le style se règle dans le fichier `disclaimer.css`, chargé dans l'en-tête des
 
 ## Bon à savoir
 
-* **L'avertissement ne s'affiche qu'une fois par session, même sans accepter.** Si le visiteur recharge la page ou ouvre une autre page sans cliquer sur « J'accepte », il entre sur le blog. Seule la première page est bloquée.
-* Les flux (Atom, RSS), le fichier `robots.txt` et les autres adresses du blog renvoient aussi la page d'avertissement aux visiteurs qui ne sont pas des robots reconnus. Les lecteurs de flux n'arrivent donc pas à lire le blog.
-* Seuls les accès à l'API du plugin _ApiServer_ ne sont pas bloqués. Un autre plugin peut ajouter d'autres exceptions.
+* Tant que le visiteur n'a pas cliqué sur « J'accepte », chaque page du blog affiche l'avertissement.
+* Les flux (Atom, RSS), les rétroliens, les webmentions, XML-RPC et l'API du plugin _ApiServer_ ne sont pas bloqués : les lecteurs de flux et les autres blogs y accèdent normalement. Un autre plugin peut ajouter d'autres exceptions.
+* Les autres adresses du blog, dont le fichier `robots.txt`, renvoient la page d'avertissement aux visiteurs qui ne sont pas des robots reconnus.
 * La reconnaissance des robots se fait sur des morceaux de mots : un navigateur dont l'identifiant contient « find », « Fast » ou « Index » passe aussi sans avertissement. Les mots courts de la liste par défaut (« bot », « search », « find ») sont les plus larges.
 * Le refus envoie le visiteur vers le lien de sortie sans message. Pensez à mettre une page d'accueil claire à cette adresse.
 * Le texte de l'avertissement est affiché tel quel, avec son HTML.
