@@ -54,7 +54,7 @@ class Frontend
         });
 
         App::frontend()->template()->addValue('DisclaimerFormURL', function (ArrayObject $attr): string {
-            return '<?php App::blog()->url(); ?>';
+            return '<?php echo Dotclear\Helper\Html\Html::escapeURL(App::blog()->url()); ?>';
         });
 
         # Behaviors

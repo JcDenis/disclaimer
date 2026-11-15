@@ -27,6 +27,10 @@ class UrlHandler
      */
     public const EXCLUDED_URL_TYPES = [
         'ApiServer',
+        'feed',
+        'trackback',
+        'webmention',
+        'xmlrpc',
     ];
 
     /**
@@ -55,11 +59,16 @@ class UrlHandler
         if (!My::settings()->getBool('disclaimer_bots_unactive', false)) {
             $bots_agents = My::settings()->getStr('disclaimer_bots_agents', false);
             $bots_agents = $bots_agents === '' ? My::DEFAULT_BOTS_AGENTS : explode(';', $bots_agents);
+            $user_agent  = isset($_SERVER['HTTP_USER_AGENT']) && is_string($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
 
             $is_bot = false;
             foreach ($bots_agents as $bot) {
-                if (isset($_SERVER['HTTP_USER_AGENT']) && is_string($_SERVER['HTTP_USER_AGENT']) && stristr($_SERVER['HTTP_USER_AGENT'], $bot)) {
+                // An empty entry must not match every user agent
+                $bot = trim($bot);
+                if ($bot !== '' && $user_agent !== '' && stripos($user_agent, $bot) !== false) {
                     $is_bot = true;
+
+                    break;
                 }
             }
 
@@ -109,14 +118,14 @@ class UrlHandler
         if (isset($_POST['disclaimerdisagree'])) {
             App::session()->destroy();
             $redir = My::settings()->getStr('disclaimer_redir', false);
-            if ($redir === '') {
-                $redir = 'http://www.dotclear.org';
+            if (!preg_match('#^https?://#i', $redir) || filter_var($redir, FILTER_VALIDATE_URL) === false) {
+                $redir = 'https://www.dotclear.org';
             }
             Http::redirect($redir);
             exit;
         # User say or said yes
         } elseif (isset($_POST['disclaimeragree'])
-            || App::session()->get('sess_blog_disclaimer') != ''
+            || in_array(App::session()->get('sess_blog_disclaimer'), [1, '1'], true)
         ) {
             App::session()->set('sess_blog_disclaimer', 1);
 

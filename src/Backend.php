@@ -6,6 +6,7 @@ namespace Dotclear\Plugin\disclaimer;
 
 use ArrayObject, Exception;
 use Dotclear\App;
+use Dotclear\Core\Backend\Notices;
 use Dotclear\Helper\Process\TraitProcess;
 use Dotclear\Helper\Html\Form\Checkbox;
 use Dotclear\Helper\Html\Form\Div;
@@ -48,7 +49,13 @@ class Backend
 
                 try {
                     $s->put('disclaimer_active', isset($_POST['disclaimer_active']));
-                    $s->put('disclaimer_redir', isset($_POST['disclaimer_redir']) && is_string($_POST['disclaimer_redir']) ? $_POST['disclaimer_redir'] : '');
+                    // An invalid redirection URL is not saved, previous one is kept
+                    $redir = isset($_POST['disclaimer_redir']) && is_string($_POST['disclaimer_redir']) ? trim($_POST['disclaimer_redir']) : '';
+                    if ($redir !== '' && (!preg_match('#^https?://#i', $redir) || filter_var($redir, FILTER_VALIDATE_URL) === false)) {
+                        Notices::addWarningNotice(__('Redirection URL must be a valid http or https URL.'));
+                    } else {
+                        $s->put('disclaimer_redir', $redir);
+                    }
                     $s->put('disclaimer_title', isset($_POST['disclaimer_title']) && is_string($_POST['disclaimer_title']) ? $_POST['disclaimer_title'] : '');
                     $s->put('disclaimer_text', isset($_POST['disclaimer_text']) && is_string($_POST['disclaimer_text']) ? $_POST['disclaimer_text'] : '');
                     $s->put('disclaimer_bots_unactive', isset($_POST['disclaimer_bots_unactive']));
@@ -56,6 +63,7 @@ class Backend
                 } catch (Exception $e) {
                     $s->drop('disclaimer_active');
                     $s->put('disclaimer_active', 0);
+                    Notices::addErrorNotice($e->getMessage());
                 }
             },
 

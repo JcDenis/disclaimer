@@ -75,3 +75,5 @@ msgstr "<p>Vous devez accepter ces conditions avant d'entrer</p>"
 msgid "Add a disclaimer to your blog entrance"
 msgstr "Ajoute un avertissement à l'entrée sur le blog"
 
+msgid "Redirection URL must be a valid http or https URL."
+msgstr "L'URL de redirection doit être une URL http ou https valide."
