@@ -1,3 +1,8 @@
+disclaimer 1.10 - 2026.11.15
+===========================================================
+* [fix] Bypass from second page, excluded feeds and pings, bots detection, form URL, redirection URL, save errors
+* [docs] Add a user guide in French, with screenshots
+
 disclaimer 1.9 - 2026.11.11
 ===========================================================
 * Fix disclaimer blocking API calls
